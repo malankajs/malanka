@@ -1,0 +1,31 @@
+<h1 class="header header_big">Example</h1>
+
+<div class="example">
+    <h3>Input</h3>
+
+    <div>
+        <Input value=@searchState.query onenter=onSearch />
+    </div>
+
+    <div as=region></div>
+
+    <h4>Binding value</h4>
+    <div>
+        {{@searchState.query}}
+    </div>
+</div>
+
+<div class="example">
+    <h3>Collection</h3>
+
+    <div class="columns">
+        <div class="column">
+            {{#each repositories tagName="table"}}
+                <RepositoryTableRow model=this />
+            {{/each}}
+        </div>
+        <div class="column">
+            <RepositoriesTable collection=repositories />
+        </div>
+    </div>
+</div>

@@ -1,0 +1,14 @@
+.root {
+    border: 1px solid #999;
+    border-radius: 2px;
+}
+
+.root + .root {
+    margin-top: 10px;
+}
+
+.input {
+    border: 0;
+    padding: 6px;
+    width: 100%;
+}

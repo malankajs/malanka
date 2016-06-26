@@ -1,0 +1,206 @@
+Content = (DocType / Comment / BalancedTag / SelfClosingTag / BlockExpression / ExpressionComment / Expression / Text)*
+
+DocType = "<!doctype " doctype:[^>]* ">" {
+    return {
+        type: 'DocType',
+        content: doctype.join('')
+    };
+}
+
+Comment = "<!--" c:(!"-->" c:. {return c})* "-->" {
+    return {
+        type: 'Comment',
+        content: c.join('')
+    };
+}
+
+BalancedTag = startTag:StartTag content:Content endTag:EndTag {
+    if (startTag.name != endTag) {
+        throw new Error("Expected </" + startTag.name + "> but </" + endTag + "> found.");
+    }
+
+    return {
+      type: 'BalancedTag',
+      name: startTag.name,
+      attributes: startTag.attributes,
+      content: content
+    };
+  }
+
+SelfClosingTag = "<" name:TagName attributes:Attributes? spaces? "/>" {
+    return {
+      type: 'SelfClosingTag',
+      name: name,
+      attributes: attributes
+    };
+  }
+
+StartTag = "<" name:TagName attributes:Attributes? spaces? ">" {
+  return {
+    name: name,
+    attributes: attributes
+  }
+}
+
+EndTag = "</" name:TagName ">" { return name; }
+
+Attributes = spaces attributes:Attribute* { return attributes; }
+
+Attribute = spaces? attr:(ValuedAttribute / ValuelessAttribute) { return attr; }
+
+ValuedAttribute
+  = name:AttributeName '=' value:Expression {
+    return {
+      name: name,
+      value: value
+    }
+  }
+  / name:AttributeName '=' value:AttributeExpressionParam {
+    return {
+      name: name,
+      value: value
+    }
+  }
+  / name:AttributeName "=" value:AttributeValue {
+    return {
+      name: name,
+      value: value
+    };
+  }
+
+ValuelessAttribute = name:AttributeName {
+  return {
+    name: name,
+    value: null
+  };
+}
+
+AttributeName = chars:[a-zA-Z0-9\-]+ { return chars.join(""); }
+AttributeValue = (QuotedAttributeValue / UnquotedAttributeValue)
+
+QuotedAttributeValue = value:QuotedString { return value; }
+
+UnquotedAttributeValue = value:decimalDigit* { return value.join(''); }
+
+TagName = chars:[a-zA-Z0-9]+ { return chars.join(""); }
+
+Text
+  = open:'{' chars:[^{]+ {
+  	return {
+    	type: 'Text',
+        content: open + chars.join('')
+    }
+  }
+  / chars:[^<{]+  {
+    return {
+      type: 'Text',
+      content: chars.join("")
+    }
+  }
+
+
+decimalDigit = [0-9]
+
+
+QuotedString = quoteStart:('"'/"'") chars:[a-zA-Z0-9://\.-]+ quoteEnd:('"'/"'") {
+  if (quoteStart != quoteEnd) {
+    throw new Error("Unmatched quote; Expected " + quoteStart + " but " + quoteEnd + " found.");
+  }
+  return chars.join("");
+}
+
+QuotedString
+  = "\"" content:(Expression / BlockExpression / string)* "\"" {
+  	return content;
+  }
+  string = data:stringData+ { return data.join('') }
+  stringData
+    = [^"\\#{]
+    / "\\0" !decimalDigit { '\0' }
+    / "\\0" &decimalDigit { throw new SyntaxError ['string data'], 'octal escape sequence', offset(), line(), column() }
+    / "\\b" { '\b' }
+    / "\\t" { '\t' }
+    / "\\n" { '\n' }
+    / "\\v" { '\v' }
+    / "\\f" { '\f' }
+    / "\\r" { '\r' }
+    / "\\" c:. { c }
+    / c:"#" !"{" { c }
+
+ExpressionPath = path:[@_a-zA-Z.0-9]+ { return path.join('') }
+
+ExpressionName = (!'else' name:[@_a-zA-Z_0-9.]+) { return name.join('') }
+AttributeExpressionParam = param:[^}"/#> ]+ {
+	return {
+    	type: 'Expression',
+        value: param.join('')
+    };
+}
+
+ExpressionAttribute = spaces path:ExpressionPath (!'=') { return path; }
+ExpressionAttributes = attributes:ExpressionAttribute+ { return attributes }
+
+ExpressionHashValue
+	= value:ExpressionPath { return { type: "path", path: value } }
+    / value:QuotedString { return value; }
+
+ExpressionHashAttribute = spaces name:ExpressionName '=' value:ExpressionHashValue {
+	return {
+    	name: name,
+        value: value
+    }
+}
+
+ExpressionHash = attrs:ExpressionHashAttribute+ { return attrs; }
+
+Expression = open:'{{' value:ExpressionName params:ExpressionAttributes? hash:ExpressionHash? spaces? close:'}}' {
+    return {
+        type: 'Expression',
+        value: value,
+        params: params,
+        hash: hash
+    };
+}
+
+StartBlockExpression = open:'{{#' name:ExpressionName attributes:ExpressionAttributes? hash:ExpressionHash? spaces? close:'}}' {
+    return {
+        name: name,
+        attributes: attributes,
+        hash: hash
+    }
+}
+
+CloseBlockExpression = open:'{{/' name:ExpressionName close:'}}' { return {name: name}; }
+
+InverseBlockExpression = '{{else}}' content:Content { return content; }
+
+BlockExpression = start:StartBlockExpression content:Content? inverse:InverseBlockExpression? close:CloseBlockExpression {
+	if (start.name !== close.name) {
+        throw new Error("Unmatched block expression. Expected " + start.name + " but " + close.name + " found.");
+    }
+
+    return {
+        type: 'BlockExpression',
+        value: start.name,
+        params: start.attributes,
+        hash: start.hash,
+        content: content,
+        inverse: inverse
+    }
+}
+
+ExpressionComment
+	= '{{!--' c:(!'--}}' c:. {return c} )* '--}}' {
+        return {
+            type: 'Comment',
+            content: c.join('')
+        };
+    }
+    / '{{!' c:(!'}}' c:. {return c} )* '}}' {
+        return {
+            type: 'Comment',
+            content: c.join('')
+        };
+    }
+
+spaces = [ \t\r\n]+

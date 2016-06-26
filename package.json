@@ -1,0 +1,41 @@
+{
+  "name": "doit",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --compilers js:babel-register",
+    "peg": "pegjs lib/Template/gramma.peg lib/Template/TemplateParser.js",
+    "es5": "babel -w -d es5 lib"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.10.1",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-plugin-transform-runtime": "^6.9.0",
+    "babel-plugin-webpack-loaders": "^0.6.1",
+    "babel-preset-es2015-loose": "^7.0.0",
+    "babel-register": "^6.9.0",
+    "babel-runtime": "^6.9.2",
+    "css-loader": "^0.23.1",
+    "express": "^4.14.0",
+    "extract-text-webpack-plugin": "^1.0.1",
+    "mocha": "^2.5.3",
+    "nodemon": "^1.9.2",
+    "peg-loader": "0.0.2",
+    "pegjs": "^0.9.0",
+    "postcss-loader": "^0.9.1",
+    "source-map-support": "^0.4.0",
+    "style-loader": "^0.13.1",
+    "webpack": "^1.13.1",
+    "webpack-dev-middleware": "^1.6.1",
+    "webpack-dev-server": "^1.14.1"
+  },
+  "dependencies": {
+    "babel-core": "^6.9.1",
+    "babel-loader": "^6.2.4",
+    "chai": "^3.5.0",
+    "glob": "^7.0.5"
+  }
+}
