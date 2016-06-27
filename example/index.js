@@ -11,13 +11,11 @@ let env = new Environment({
     renderer: new DomRenderer()
 });
 
-let searchState = new SearchState();
+let searchState = new SearchState({
+    query: 'injectify'
+});
 let repositories = new Repositories(null, {
     query: searchState.proxy('query')
-});
-
-let model = new Model({
-    value: 'Hello world'
 });
 
 let page = new Page({searchState, repositories});

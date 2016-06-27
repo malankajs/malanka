@@ -9,9 +9,13 @@ import {Repository} from '../models/Repository';
 export class Repositories extends Collection {
 
     initialize() {
-        this.query.on(() => this.update())
+        this.query.on(() => this.update());
+        this.update();
     }
 
+    /**
+     *
+     */
     update() {
         var query = this.query.getValue();
 
