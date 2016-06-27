@@ -1,8 +1,8 @@
 import {expect} from 'chai';
 
-import {pathFixture} from './fixtures';
 import {TemplateNodeComponent} from '../lib/Template/nodes/TemplateNodeComponent';
 import {TemplateEnvironment} from '../lib/Template/TemplateEnvironment';
+import {TemplateCompiler} from '../lib/Template/TemplateCompiler';
 
 describe('TemplateNodeComponent', function () {
     let env;
@@ -27,6 +27,31 @@ describe('TemplateNodeComponent', function () {
         let node = TemplateNodeComponent.factory({name: 'div', attributes: [{name: 'as', value: {type: 'path', path: 'test'}}]}, env);
 
         expect(node.compile()).to.equal('context.test=new Component({})');
+    });
+
+    describe('with compiler', function() {
+        let compiler;
+
+        beforeEach(function(){
+            compiler = new TemplateCompiler({
+                optimize: {
+                    plugins: []
+                }
+            });
+        });
+
+        it('compile scope', function() {
+            let result = compiler.compileString('<div scope="scope"><div>{{scope.test}}</div></div>').split('\n').pop();
+
+            expect(result).to.equal('module.exports = function(context){return new Component({"content":function(scope){return new Component({"content":scope.test})}})}');
+        });
+
+        it('compile scope region', function() {
+            let result = compiler.compileString('<div scope="scope"><div as=scope.test></div></div>').split('\n').pop();
+
+            expect(result).to.equal('module.exports = function(context){return new Component({"content":function(scope){return scope.test=new Component({})}})}');
+        });
+
     });
 
 });

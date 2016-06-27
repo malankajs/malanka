@@ -1,86 +1,41 @@
 import {expect} from 'chai';
 
-import {pathFixture} from './fixtures';
 import {TemplateNodeBlockHelper} from '../lib/Template/nodes/TemplateNodeBlockHelper';
 import {TemplateNodePath} from '../lib/Template/nodes/TemplateNodePath';
-import {TemplateNodeVar} from '../lib/Template/nodes/TemplateNodeVar';
 import {TemplateEnvironment} from '../lib/Template/TemplateEnvironment';
+import {TemplateCompiler} from "../lib/Template/TemplateCompiler";
 
 describe('TemplateNodeBlockHelper', function () {
-    let env;
+    let env, compiler;
 
     beforeEach(function () {
         env = new TemplateEnvironment({
             helpers: {}
-        })
+        });
+
+        compiler = new TemplateCompiler({
+            optimize: {
+                plugins: []
+            }
+        });
     });
 
     it('compile with context', function () {
-        let ast = {
-            path: new TemplateNodePath('test', env),
-            content: [
-                {
-                    type: 'path',
-                    value: 'this.test'
-                }
-            ]
-        };
+        let result = compiler.compileString('{{#test scope="test"}}{{test.abc}}{{/test}}').split('\n').pop();
 
-        let node = TemplateNodeBlockHelper.factory(ast, env);
-
-        expect(node.compile()).to.equal('context.test.call(context,{"hash":{},"content":function(v0){return v0.test;}})');
+        expect(result).to.equal('module.exports = function(context){return context.test.call(context,{"hash":{},"content":function(test){return test.abc}})}');
     });
 
     it('compile with context several scopes', function () {
-        let ast = {
-            path: new TemplateNodePath('test', env),
-            content: [
-                {
-                    type: 'BlockExpression',
-                    path: 'test',
-                    content: [
-                        {
-                            type: 'path',
-                            value: 'this.test'
-                        },
-                        {
-                            type: 'path',
-                            value: 'this.this.test'
-                        }
-                    ]
-                }
-            ]
-        };
+        let result = compiler.compileString('{{#test scope="v0"}}{{#test scope="v1"}}{{v0.test}}{{v1.test}}{{/test}}{{/test}}').split('\n').pop();
 
-        let node = TemplateNodeBlockHelper.factory(ast, env);
-
-        expect(node.compile()).to.equal('context.test.call(context,{"hash":{},"content":function(v0){return context.test.call(context,{"hash":{},"content":function(v1){return [v1.test,v0.test];}});}})');
+        expect(result).to.equal('module.exports = function(context){return context.test.call(context,{"hash":{},"content":function(v0){return context.test.call(context,{"hash":{},"content":function(v1){return [v0.test,v1.test]}})}})}');
     });
 
     it('compile this', function () {
-        let ast = {
-            path: new TemplateNodePath('test', env),
-            content: [
-                {
-                    type: 'BlockExpression',
-                    path: 'test',
-                    content: [
-                        {
-                            type: 'path',
-                            value: 'this'
-                        },
-                        {
-                            type: 'path',
-                            value: 'this.this'
-                        }
-                    ]
-                }
-            ]
-        };
+        let result = compiler.compileString('{{#test scope="v0"}}{{v0}}{{/test}}').split('\n').pop();
 
-        let node = TemplateNodeBlockHelper.factory(ast, env);
-
-        expect(node.compile()).to.equal('context.test.call(context,{"hash":{},"content":function(v0){return context.test.call(context,{"hash":{},"content":function(v1){return [v1,v0];}});}})');
+        expect(result).to.equal('module.exports = function(context){return context.test.call(context,{"hash":{},"content":function(v0){return v0}})}');
     });
 
 });

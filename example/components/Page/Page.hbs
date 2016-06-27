@@ -7,8 +7,6 @@
         <Input value=@searchState.query onenter=onSearch />
     </div>
 
-    <div as=region></div>
-
     <h4>Binding value</h4>
     <div>
         {{@searchState.query}}
@@ -18,14 +16,11 @@
 <div class="example">
     <h3>Collection</h3>
 
-    <div class="columns">
-        <div class="column">
-            {{#each repositories tagName="table"}}
-                <RepositoryTableRow model=this />
-            {{/each}}
-        </div>
-        <div class="column">
-            <RepositoriesTable collection=repositories />
-        </div>
-    </div>
+    <Columns scope="cols">
+        {{#each repositories tagName="table" as=cols.columnA scope="repository"}}
+            <RepositoryTableRow model=repository />
+        {{/each}}
+
+        <RepositoriesTable collection=repositories as=cols.columnB />
+    </Columns>
 </div>
