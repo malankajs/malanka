@@ -16,8 +16,10 @@ module.exports = Object.assign({}, config, {
 
     externals: {
         'fs': 'commonjs fs',
+        'got': 'commonjs got',
         'path': 'commonjs path',
         'glob': 'commonjs glob',
+        'lodash': 'commonjs lodash',
         'express': 'commonjs express',
         'webpack': 'commonjs webpack',
         'source-map-support': 'commonjs source-map-support',

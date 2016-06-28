@@ -18,7 +18,7 @@ module.exports = {
     },
     module: {
         loaders: [
-            {test: /.js$/, loader: 'babel?cacheDirectory'},
+            {test: /.js$/, loader: 'babel', query: {cacheDirectory: true, ignore: ['node_modules']}},
             {test: /.peg$/, loader: 'peg'},
             {test: /.hbs$/, loader: require.resolve('../../es5/Template/loader')},
             {test: /.css$/, loader: ExtractTextWebpackPlugin.extract('css?modules&importLoaders=1&localIdentName=' + className)} // + '!postcss'

@@ -1,28 +1,35 @@
 import 'source-map-support/register';
 
-import {Environment} from '../es5';
 import {StringRenderer} from '../es5/Renderer/StringRenderer';
+import {GotRequest} from '../es5/Request/GotRequest';
 
-import {Repositories} from './collections/Repositories';
-import {SearchState} from './models/SearchState';
+import {diConfig} from './di.config';
+import {createContainer, then} from 'di.js/build/di.es5';
 
-import {Page} from './components/Page/Page';
-
-let env = new Environment({
-    renderer: new StringRenderer()
-});
-
-let searchState = new SearchState();
-let repositories = new Repositories(null, {
-    query: searchState.proxy('query')
-});
-
-let page = new Page({searchState, repositories});
 
 export default function (req, res, next) {
-    var body = env.render(page).toString();
+    let di = createContainer(diConfig);
 
-    let html = `<head><link rel="stylesheet" href="styles.css"/></head><body>${body}<script type="text/javascript" src="bundle.js"></script></body>`;
+    di.put('renderer', new StringRenderer());
+    di.put('request', new GotRequest());
 
-    res.send(html);
+    let event = {
+        query: {
+            query: 'injectify'
+        }
+    };
+
+    then(di({page: 'page', 'env': 'env'}, {event}), ({page, env}) => {
+        console.time('Server render');
+        var body = env.render(page).toString();
+        console.timeEnd('Server render');
+
+        let diData = JSON.stringify(di.serialize()).replace(/</gi, '&lt;');
+
+        let html = `<head><link rel="stylesheet" href="styles.css"/></head><body>${body}<script>var diData=${diData};</script><script type="text/javascript" src="bundle.js"></script></body>`;
+
+        res.send(html);
+    }, (err) => {
+        next(err);
+    });
 }

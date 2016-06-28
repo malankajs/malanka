@@ -3,23 +3,24 @@ import {Repository} from '../models/Repository';
 
 @Prototype({
     url: 'https://api.github.com/search/repositories',
-    model: Repository
+    Model: Repository
 })
 export class Repositories extends Collection {
 
     initialize() {
+        this.query = this.searchState.proxy('query');
+
         this.query.on(() => this.update());
-        this.update();
     }
 
     /**
-     *
+     * @returns {Promise}
      */
     update() {
         var query = this.query.getValue();
 
         if (query) {
-            this._promise = Promise.resolve(this._promise)
+            return this._promise = Promise.resolve(this._promise)
                 .catch(() => {
                     this._promise = null;
                 })
@@ -34,9 +35,14 @@ export class Repositories extends Collection {
                         });
                     }
                 });
-        } else {
-
         }
+    }
+
+    /**
+     * @returns {Promise}
+     */
+    updateDependencies() {
+        return this.update();
     }
 
     /**
