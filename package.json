@@ -7,7 +7,7 @@
     "start": "node start.js",
     "test": "mocha --compilers js:babel-register",
     "peg": "pegjs lib/Template/gramma.peg lib/Template/TemplateParser.js",
-    "es5": "babel -w -d es5 lib"
+    "es5": "babel -w -s inline -d es5 lib"
   },
   "author": "",
   "license": "ISC",

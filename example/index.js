@@ -1,6 +1,5 @@
-import {Model} from '../lib/Model';
-import {Environment} from '../lib/Environment';
-import {DomRenderer} from '../lib/Renderer/DomRenderer';
+import {Environment} from '../es5';
+import {DomRenderer} from '../es5/Renderer/DomRenderer';
 
 import {Repositories} from './collections/Repositories';
 import {SearchState} from './models/SearchState';
@@ -11,17 +10,15 @@ let env = new Environment({
     renderer: new DomRenderer()
 });
 
-let searchState = new SearchState({
-    query: 'injectify'
-});
+let searchState = new SearchState();
 let repositories = new Repositories(null, {
     query: searchState.proxy('query')
 });
 
 let page = new Page({searchState, repositories});
-console.log(page);
 
 env.render(page, document.body.firstChild);
+searchState.set('query', 'injectify');
 
 // document.body.appendChild(env.render(page));
 

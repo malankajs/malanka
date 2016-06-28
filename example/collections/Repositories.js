@@ -1,5 +1,4 @@
-import {Collection} from '../../lib/Collection';
-import {Prototype} from '../../lib/Prototype';
+import {Collection, Prototype} from '../../es5';
 import {Repository} from '../models/Repository';
 
 @Prototype({

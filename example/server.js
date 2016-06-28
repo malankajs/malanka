@@ -1,7 +1,7 @@
 import 'source-map-support/register';
 
-import {Environment} from '../lib/Environment';
-import {StringRenderer} from '../lib/Renderer/StringRenderer';
+import {Environment} from '../es5';
+import {StringRenderer} from '../es5/Renderer/StringRenderer';
 
 import {Repositories} from './collections/Repositories';
 import {SearchState} from './models/SearchState';

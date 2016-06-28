@@ -1,5 +1,4 @@
-import {CollectionComponent} from '../../../lib/CollectionComponent';
-import {Defaults} from '../../../lib/Defaults';
+import {CollectionComponent, Defaults} from '../../../es5';
 
 import {RepositoryTableRow} from '../RepositoryTableRow/RepositoryTableRow';
 

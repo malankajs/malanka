@@ -22,32 +22,4 @@ describe('TemplateNodeContent', function () {
         expect(node.compile()).to.equal('"testtest2"');
     });
 
-    it('optimize string literals with variable', function () {
-        let ast = [
-            'test',
-            {
-                type: 'Expression',
-                value: 'test'
-            }
-        ];
-
-        let node = TemplateNodeContent.factory(ast, env);
-
-        expect(node.compile({mergeVars: true}).toString()).to.equal('["test",context.test].join(\'\')');
-    });
-
-    it('optimize string literals with @variable', function () {
-        let ast = [
-            'test',
-            {
-                type: 'Expression',
-                value: '@test'
-            }
-        ];
-
-        let node = TemplateNodeContent.factory(ast, env);
-
-        expect(node.compile({mergeVars: true}).toString()).to.equal('(function(v0){return v0.mutate(function(){return ["test",v0].join(\'\')})})(context.proxy("test"))');
-    });
-
 });

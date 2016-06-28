@@ -23,13 +23,13 @@ describe('StylesOptimizer', function () {
     it('transform two classes', function () {
         let result = compiler.compileString('<div class="test1 test2"></div>').split('\n').pop();
 
-        expect(result).to.equal('module.exports = function(context){return new Component({"attributes":{"class":[context.styles.test1," ",context.styles.test2].join(\'\')}})}');
+        expect(result).to.equal('module.exports = function(context){return new Component({"attributes":{"class":__mergeStrings([context.styles.test1," ",context.styles.test2], context).join(\'\')}})}');
     });
 
     it('transform class with interpolation', function () {
         let result = compiler.compileString('<div class="test1 {{test}} test2"></div>').split('\n').pop();
 
-        expect(result).to.equal('module.exports = function(context){return new Component({"attributes":{"class":[context.styles.test1,"  ",context.test,"  ",context.styles.test2].join(\'\')}})}');
+        expect(result).to.equal('module.exports = function(context){return new Component({"attributes":{"class":__mergeStrings([context.styles.test1,"  ",context.test,"  ",context.styles.test2], context).join(\'\')}})}');
     });
 
 });

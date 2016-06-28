@@ -1,5 +1,4 @@
-import {Component} from '../../../lib/Component';
-import {Defaults} from '../../../lib/Defaults';
+import {Component, Defaults} from '../../../es5';
 
 import template from './Input.hbs';
 import styles from './Input.css';

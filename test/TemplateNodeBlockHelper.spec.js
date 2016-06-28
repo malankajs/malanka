@@ -29,7 +29,7 @@ describe('TemplateNodeBlockHelper', function () {
     it('compile with context several scopes', function () {
         let result = compiler.compileString('{{#test scope="v0"}}{{#test scope="v1"}}{{v0.test}}{{v1.test}}{{/test}}{{/test}}').split('\n').pop();
 
-        expect(result).to.equal('module.exports = function(context){return context.test.call(context,{"hash":{},"content":function(v0){return context.test.call(context,{"hash":{},"content":function(v1){return [v0.test,v1.test]}})}})}');
+        expect(result).to.equal('module.exports = function(context){return context.test.call(context,{"hash":{},"content":function(v0){return context.test.call(context,{"hash":{},"content":function(v1){return __mergeStrings([v0.test,v1.test], context)}})}})}');
     });
 
     it('compile this', function () {

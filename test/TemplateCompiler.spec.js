@@ -29,7 +29,7 @@ let compile = function (string) {
 
     let moduleContent = compiler.compileString(string);
 
-    console.log(moduleContent);
+    // console.log(moduleContent);
 
     let module = {};
     eval(moduleContent);
