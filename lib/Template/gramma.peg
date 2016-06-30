@@ -127,22 +127,33 @@ QuotedString
     / "\\" c:. { c }
     / c:"#" !"{" { c }
 
-ExpressionPath = path:[@_a-zA-Z.0-9]+ { return path.join('') }
+ExpressionPath = path:[@_a-zA-Z.0-9]+ {
+	return {
+    	type: 'Path',
+        path: path.join('')
+    };
+}
 
 ExpressionName = (!'else' name:[@_a-zA-Z_0-9.]+) { return name.join('') }
 AttributeExpressionParam = param:[^}"/#> ]+ {
 	return {
-    	type: 'Expression',
-        value: param.join('')
+    	type: 'Path',
+        path: param.join('')
     };
 }
 
-ExpressionAttribute = spaces path:ExpressionPath (!'=') { return path; }
+ExpressionAttribute
+	= spaces value:Primitive { return value }
+    / spaces path:ExpressionPath (!'=') { return path; }
+    / spaces helper:InlineExpression { return helper; }
+	/ spaces string:QuotedString { return string; }
 ExpressionAttributes = attributes:ExpressionAttribute+ { return attributes }
 
 ExpressionHashValue
-	= value:ExpressionPath { return { type: "path", path: value } }
-    / value:QuotedString { return value; }
+	= value:Primitive { return value }
+    / path:ExpressionPath { return path }
+    / helper:InlineExpression { return helper; }
+    / string:QuotedString { return string }
 
 ExpressionHashAttribute = spaces name:ExpressionName '=' value:ExpressionHashValue {
 	return {
@@ -153,39 +164,48 @@ ExpressionHashAttribute = spaces name:ExpressionName '=' value:ExpressionHashVal
 
 ExpressionHash = attrs:ExpressionHashAttribute+ { return attrs; }
 
-Expression = open:'{{' value:ExpressionName params:ExpressionAttributes? hash:ExpressionHash? spaces? close:'}}' {
+Expression = open:'{{' path:ExpressionName params:ExpressionAttributes? hash:ExpressionHash? spaces? close:'}}' {
     return {
         type: 'Expression',
-        value: value,
+        path: path,
         params: params,
         hash: hash
     };
 }
 
-StartBlockExpression = open:'{{#' name:ExpressionName attributes:ExpressionAttributes? hash:ExpressionHash? spaces? close:'}}' {
+StartBlockExpression = open:'{{#' path:ExpressionName attributes:ExpressionAttributes? hash:ExpressionHash? spaces? close:'}}' {
     return {
-        name: name,
+        path: path,
         attributes: attributes,
         hash: hash
     }
 }
 
-CloseBlockExpression = open:'{{/' name:ExpressionName close:'}}' { return {name: name}; }
+CloseBlockExpression = open:'{{/' name:ExpressionName close:'}}' { return name; }
 
 InverseBlockExpression = '{{else}}' content:Content { return content; }
 
 BlockExpression = start:StartBlockExpression content:Content? inverse:InverseBlockExpression? close:CloseBlockExpression {
-	if (start.name !== close.name) {
+	if (start.path !== close) {
         throw new Error("Unmatched block expression. Expected " + start.name + " but " + close.name + " found.");
     }
 
     return {
         type: 'BlockExpression',
-        value: start.name,
+        path: start.path,
         params: start.attributes,
         hash: start.hash,
         content: content,
         inverse: inverse
+    }
+}
+
+InlineExpression = '(' path:ExpressionName params:ExpressionAttributes? hash:ExpressionHash? spaces? ')' {
+	return {
+    	type: 'Expression',
+        path: path,
+        params: params,
+        hash: hash
     }
 }
 
@@ -201,6 +221,18 @@ ExpressionComment
             type: 'Comment',
             content: c.join('')
         };
+    }
+
+Primitive
+	= 'false' { return {type: 'Primitive', value: false} }
+    / 'true' { return {type: 'Primitive', value: true} }
+    / 'null' { return {type: 'Primitive', value: null} }
+    / 'undefined' { return {type: 'Primitive', value: undefined} }
+    / nums:([0-9]+) d:(d:'.' n:[0-9]+ { return d + n.join('') }) {
+    	return {type: 'Primitive', value: Number(nums.join('') + d)}
+    }
+    / nums:([0-9]+) {
+    	return {type: 'Primitive', value: Number(nums.join(''))}
     }
 
 spaces = [ \t\r\n]+

@@ -1,6 +1,6 @@
-export function pathFixture(value) {
+export function pathFixture(path) {
     return {
-        type: 'Expression',
-        value: value
+        type: 'Path',
+        path
     };
 }

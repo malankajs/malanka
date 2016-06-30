@@ -1,4 +1,4 @@
-import 'source-map-support/register';
+// import 'source-map-support/register';
 
 import {StringRenderer} from '../es5/Renderer/StringRenderer';
 import {GotRequest} from '../es5/Request/GotRequest';
@@ -29,6 +29,8 @@ export default function (req, res, next) {
         let html = `<head><link rel="stylesheet" href="styles.css"/></head><body>${body}<script>var diData=${diData};</script><script type="text/javascript" src="bundle.js"></script></body>`;
 
         res.send(html);
+        
+        di.destroy();
     }, (err) => {
         next(err);
     });

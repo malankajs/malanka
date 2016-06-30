@@ -24,7 +24,7 @@ describe('TemplateNodeComponent', function () {
     });
 
     it('compile `as` statement', function () {
-        let node = TemplateNodeComponent.factory({name: 'div', attributes: [{name: 'as', value: {type: 'path', path: 'test'}}]}, env);
+        let node = TemplateNodeComponent.factory({name: 'div', attributes: [{name: 'as', value: {type: 'Path', path: 'test'}}]}, env);
 
         expect(node.compile()).to.equal('context.test=new Component({})');
     });
