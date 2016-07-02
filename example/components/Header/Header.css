@@ -1,0 +1,11 @@
+.root {
+    background: #00bcd4;
+}
+
+.header {
+    font-size: 56px;
+    font-weight: 400;
+    /*line-height: 1.5;*/
+    color: white;
+    padding: 74px;
+}

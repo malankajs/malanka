@@ -22,4 +22,16 @@ describe('TemplateNodeContent', function () {
         expect(node.compile()).to.equal('"testtest2"');
     });
 
+    it('strip comments', function () {
+        let ast = [
+            'test',
+            {type: 'Comment', content: '123'},
+            'test2'
+        ];
+
+        let node = TemplateNodeContent.factory(ast, env);
+
+        expect(node.compile()).to.equal('"testtest2"');
+    });
+
 });

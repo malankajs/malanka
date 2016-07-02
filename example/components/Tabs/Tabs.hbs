@@ -1,0 +1,15 @@
+{{#each tabs scope="tab" className=styles.head}}
+    <div
+            class="tab{{#if @tab.active}} {{styles.tab_active}}{{/if}}"
+            onclick=onClick
+            data-tab="{{@tab.id}}"
+    >
+        {{@tab.title}}
+    </div>
+{{/each}}
+
+{{#each tabsContent scope="body" className=styles.body}}
+    <div class="content{{#if @body.active}} {{styles.content_active}}{{/if}}">
+        {{body.content}}
+    </div>
+{{/each}}

@@ -1,4 +1,4 @@
-// import 'source-map-support/register';
+import 'source-map-support/register';
 
 import {StringRenderer} from '../es5/Renderer/StringRenderer';
 import {GotRequest} from '../es5/Request/GotRequest';
@@ -15,7 +15,7 @@ export default function (req, res, next) {
 
     let event = {
         query: {
-            query: 'injectify'
+            query: ''
         }
     };
 

@@ -1,26 +1,104 @@
-<h1 class="header header_big">Example</h1>
+<Header>
 
-<div class="example">
-    <h3>Input</h3>
+</Header>
 
-    <div>
-        <Input value=@searchState.query onenter=onSearch />
+<Section title="Introduction">
+    <div class="text">
+        Create modern applications with new technologies
     </div>
+</Section>
 
-    <h4>Binding value</h4>
-    <div>
-        {{@searchState.query}}
+<Section title="Goals">
+    <div class="text">
+        Write HTML with handlebars syntax and get fully reactive application
+
+        <Code saveSpaces=true lang="handlebars">`
+<div class="test {{varClass}}">
+    <Button onclick=onButtonClicked>
+        {{@model.value}} {{! Watch value}}
+    </Button>
+</div>`
+        </Code>
+
+        Use reactive when you need it only
+
+        <Code saveSpaces=true lang="handlebars">`
+{{model.value}} will render once,
+but {{@model.value}} will be updated automatically`
+        </Code>
+
+        And where you need it
+
+        <Code saveSpaces=true lang="handlebars">`
+            <input value=@model.value data-initial="It was {{model.value}}"/>`
+        </Code>
+
+        Write your own components
+
+        <Code saveSpaces=true>`
+import {Component, Defaults} from '../../../es5';
+
+import styles from './Button.css';
+import template from './Button.hbs';
+
+@Defaults({template, styles, tagName: 'button'})
+export class Button extends Component {
+
+}
+            `
+        </Code>
+
+        And use it anywhere
+
+        <Code saveSpaces=true lang="handlebars">`
+            <Button>This is custom button</Button>`
+        </Code>
     </div>
-</div>
+</Section>
 
-<div class="example">
-    <h3>Collection</h3>
+<Section title="Components">
+    <div class="text">
+        Custom components is a base of application. To create your first component all you need is
+        create new class and extend it from <code>Component</code>. For example create custom input,
+        which allow two-way data binding for value attribute
 
-    <Columns scope="cols">
-        {{#each repositories tagName="table" as=cols.columnA scope="repository"}}
-            <RepositoryTableRow model=repository />
-        {{/each}}
+        <Tabs scope="tabs" js="Component" css="Styles" hbs="Template" active="js" result="Result">
+            <Code as=tabs.body.js>{{require "!!raw!../Input/Input.js"}}</Code>
+            <Code as=tabs.body.css lang="css">{{require "!!raw!../Input/Input.css"}}</Code>
+            <Code as=tabs.body.hbs lang="handlebars">{{require "!!raw!../Input/Input.hbs"}}</Code>
 
-        <RepositoriesTable collection=repositories as=cols.columnB />
-    </Columns>
-</div>
+            <div as=tabs.body.result class="result">
+                <Input value=@model.value/>
+
+                <p>Input value: {{@model.value}}</p>
+            </div>
+        </Tabs>
+    </div>
+</Section>
+
+{{!--<h1 class="header header_big">Example</h1>--}}
+
+{{!--<div class="example">--}}
+    {{!--<h3>Input</h3>--}}
+
+    {{!--<div>--}}
+        {{!--<Input value=@searchState.query onenter=onSearch />--}}
+    {{!--</div>--}}
+
+    {{!--<h4>Binding value</h4>--}}
+    {{!--<div>--}}
+        {{!--{{@searchState.query}}--}}
+    {{!--</div>--}}
+{{!--</div>--}}
+
+{{!--<div class="example">--}}
+    {{!--<h3>Collection</h3>--}}
+
+    {{!--<Columns scope="cols">--}}
+        {{!--{{#each repositories tagName="table" as=cols.columnA scope="repository"}}--}}
+            {{!--<RepositoryTableRow model=repository />--}}
+        {{!--{{/each}}--}}
+
+        {{!--<RepositoriesTable collection=repositories as=cols.columnB />--}}
+    {{!--</Columns>--}}
+{{!--</div>--}}

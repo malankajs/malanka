@@ -12,10 +12,9 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "babel-cli": "^6.10.1",
     "babel-core": "^6.9.1",
     "babel-loader": "^6.2.4",
-    "chai": "^3.5.0",
-    "babel-cli": "^6.10.1",
     "babel-plugin-check-es2015-constants": "^6.8.0",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "babel-plugin-transform-es2015-arrow-functions": "^6.8.0",
@@ -41,6 +40,7 @@
     "babel-preset-es2015-loose": "^7.0.0",
     "babel-register": "^6.9.0",
     "babel-runtime": "^6.9.2",
+    "chai": "^3.5.0",
     "css-loader": "^0.23.1",
     "di.js": "ftdebugger/di.js#no-lodash",
     "express": "^4.14.0",
@@ -50,11 +50,15 @@
     "nodemon": "^1.9.2",
     "pegjs": "^0.9.0",
     "postcss-loader": "^0.9.1",
+    "prism": "^1.0.0",
+    "prismjs": "^1.5.1",
+    "raw-loader": "^0.5.1",
     "source-map-support": "^0.4.0",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.1",
     "webpack-dev-middleware": "^1.6.1",
-    "webpack-dev-server": "^1.14.1"
+    "webpack-dev-server": "^1.14.1",
+    "webpack-hot-middleware": "^2.12.0"
   },
   "dependencies": {
     "glob": "^7.0.5"

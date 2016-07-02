@@ -1,6 +1,6 @@
 import {webpackResolver, staticResolver} from 'di.js/build/di.es5';
 import {Page} from './components/Page/Page';
-import {Environment} from '../es5';
+import {Environment, Model, Collection} from '../es5';
 
 export let diConfig = {
     resolvers: [
@@ -10,7 +10,9 @@ export let diConfig = {
         ]),
         staticResolver({
             Page,
-            Environment
+            Environment,
+            Model,
+            Collection
         })
     ],
     dependencies: {
@@ -18,11 +20,14 @@ export let diConfig = {
 
         page: ['Page', {
             searchState: 'searchState',
-            repositories: 'repositories'
+            repositories: 'repositories',
+            model: 'model'
         }],
 
         // Data models & collections
-
+        
+        model: 'Model',
+        
         repositories: ['Repositories', {
             searchState: 'searchState',
             request: 'request'

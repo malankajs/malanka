@@ -1,4 +1,4 @@
-Content = (DocType / Comment / BalancedTag / SelfClosingTag / BlockExpression / ExpressionComment / Expression / Text)*
+Content = (EscapedString / DocType / Comment / BalancedTag / SelfClosingTag / BlockExpression / ExpressionComment / Expression / Text)*
 
 DocType = "<!doctype " doctype:[^>]* ">" {
     return {
@@ -49,7 +49,13 @@ Attributes = spaces attributes:Attribute* { return attributes; }
 Attribute = spaces? attr:(ValuedAttribute / ValuelessAttribute) { return attr; }
 
 ValuedAttribute
-  = name:AttributeName '=' value:Expression {
+  = name:AttributeName "=" value:EscapedString {
+    return {
+      name: name,
+      value: value
+    };
+  }
+  / name:AttributeName '=' value:Expression {
     return {
       name: name,
       value: value
@@ -127,6 +133,11 @@ QuotedString
     / "\\" c:. { c }
     / c:"#" !"{" { c }
 
+EscapedString
+	= '```' { return ['`'] }
+    / '\\`' { return ['`'] }
+	/'`' text:(!'`' c:. {return c})* '`' { return [text.join('')] }
+
 ExpressionPath = path:[@_a-zA-Z.0-9]+ {
 	return {
     	type: 'Path',
@@ -144,6 +155,7 @@ AttributeExpressionParam = param:[^}"/#> ]+ {
 
 ExpressionAttribute
 	= spaces value:Primitive { return value }
+    / spaces value:EscapedString { return value }
     / spaces path:ExpressionPath (!'=') { return path; }
     / spaces helper:InlineExpression { return helper; }
 	/ spaces string:QuotedString { return string; }
@@ -151,6 +163,7 @@ ExpressionAttributes = attributes:ExpressionAttribute+ { return attributes }
 
 ExpressionHashValue
 	= value:Primitive { return value }
+    / value:EscapedString { return value }
     / path:ExpressionPath { return path }
     / helper:InlineExpression { return helper; }
     / string:QuotedString { return string }

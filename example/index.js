@@ -25,7 +25,7 @@ di.put('request', new FetchRequest());
 
 let event = {
     query: {
-        query: 'injectify'
+        query: ''
     }
 };
 

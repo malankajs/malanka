@@ -13,6 +13,9 @@ export class Input extends Component {
         this.value.setValue(event.currentTarget.value);
     }
 
+    /**
+     * @param {Event} event
+     */
     onKeyDown(event) {
         if (event.which === 13) {
             this.emitEvent('enter', event);
