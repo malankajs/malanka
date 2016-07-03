@@ -10,7 +10,7 @@ var clientConfig = require('./configs/client');
 
 var server = new Webpack(serverConfig, (err, stats) => {
     if (!err) {
-        if (fs.existsSync('../dist/server')) {
+        if (fs.existsSync('../dist/server.js')) {
             delete require.cache[require.resolve('../dist/server')];
         }
 

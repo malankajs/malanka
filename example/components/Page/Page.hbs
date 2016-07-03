@@ -62,11 +62,15 @@ export class Button extends Component {
         create new class and extend it from <code>Component</code>. For example create custom input,
         which allow two-way data binding for value attribute
 
-        <Tabs scope="tabs" js="Component" css="Styles" hbs="Template" active="js" result="Result">
+        <Tabs scope="tabs" js="Component" css="Styles" hbs="Template" active="js" result="Result" usage="Usage">
             <Code as=tabs.body.js>{{require "!!raw!../Input/Input.js"}}</Code>
             <Code as=tabs.body.css lang="css">{{require "!!raw!../Input/Input.css"}}</Code>
             <Code as=tabs.body.hbs lang="handlebars">{{require "!!raw!../Input/Input.hbs"}}</Code>
+            <Code as=tabs.body.usage lang="handlebars" saveSpaces=true>`
+                <Input value=@model.value />
 
+<p>Input value: {{@model.value}}</p>`
+            </Code>
             <div as=tabs.body.result class="result">
                 <Input value=@model.value/>
 
@@ -76,6 +80,9 @@ export class Button extends Component {
     </div>
 </Section>
 
+<Section title="Models">
+
+</Section>
 {{!--<h1 class="header header_big">Example</h1>--}}
 
 {{!--<div class="example">--}}

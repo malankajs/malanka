@@ -1,6 +1,6 @@
 {{#each tabs scope="tab" className=styles.head}}
     <div
-            class="tab{{#if @tab.active}} {{styles.tab_active}}{{/if}}"
+            class="tab{{#if @tab.active}} tab_active{{/if}}"
             onclick=onClick
             data-tab="{{@tab.id}}"
     >
@@ -9,7 +9,7 @@
 {{/each}}
 
 {{#each tabsContent scope="body" className=styles.body}}
-    <div class="content{{#if @body.active}} {{styles.content_active}}{{/if}}">
+    <div class="content{{#if @body.active}} content_active{{/if}}">
         {{body.content}}
     </div>
 {{/each}}

@@ -7,5 +7,7 @@
     font-weight: 400;
     /*line-height: 1.5;*/
     color: white;
-    padding: 74px;
+    padding: 74px 0;
+    margin: auto;
+    width: 760px;
 }

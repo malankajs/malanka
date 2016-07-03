@@ -25,7 +25,7 @@ export class Code extends Component {
     render(element) {
         super.render(element);
 
-        if (typeof window === 'object') {
+        if (this.env.isBrowser) {
             require([
                 'prismjs',
                 'prismjs/components/prism-css.js',
