@@ -4,13 +4,13 @@ var config = require('./default');
 var clientConfig = Object.assign({}, config(), {
     entry: {
         index: [
-            // 'webpack-hot-middleware/client',
             __dirname + '/../../example/index.js'
         ]
     },
     output: {
-        path: __dirname + '/../../dist',
-        filename: 'bundle.js'
+        path: __dirname + '/../../dist/client/assets',
+        filename: 'bundle.js',
+        publicPath: '/assets/'
     }
 });
 
@@ -21,5 +21,9 @@ clientConfig.module.loaders.push({
     test: /.css$/,
     loader: 'style!' + clientConfig.styles
 });
+
+if (!config.debug) {
+    clientConfig.entry.index.push('webpack-dev-server/client?http://localhost:8080/');
+}
 
 module.exports = clientConfig;

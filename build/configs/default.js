@@ -13,7 +13,9 @@ var hotComponent = require.resolve('../hotComponent');
 
 module.exports = () => {
     var config = {
+        info: true,
         debug: DEBUG,
+        stats: {colors: true},
         styles: 'css?modules&importLoaders=1&localIdentName=' + className,
 
         module: {
@@ -48,9 +50,10 @@ module.exports = () => {
         config.plugins.push(new Webpack.optimize.OccurenceOrderPlugin());
         config.plugins.push(new Webpack.optimize.UglifyJsPlugin({
             sourceMap: false,
+            semicolons: false,
             mangle: true,
             compress: {
-                warnings: false
+                warnings: true
             }
         }))
     }

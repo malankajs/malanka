@@ -25,8 +25,8 @@ export default function (req, res, next) {
         console.timeEnd('Server render');
 
         let diData = JSON.stringify(di.serialize()).replace(/</gi, '&lt;');
-
-        let html = `<head><link rel="stylesheet" href="styles.css"/></head><body>${body}<script>var diData=${diData};</script><script type="text/javascript" src="bundle.js"></script></body>`;
+        // <link rel="stylesheet" href="styles.css"/>
+        let html = `<head></head><body>${body}<script>var diData=${diData};</script><script type="text/javascript" src="/assets/bundle.js"></script></body>`;
 
         res.send(html);
         

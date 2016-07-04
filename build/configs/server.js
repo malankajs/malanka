@@ -11,7 +11,7 @@ var serverConfig = Object.assign({}, config(), {
     output: {
         library: 'server',
         libraryTarget: 'commonjs',
-        path: __dirname + '/../../dist',
+        path: __dirname + '/../../dist/server',
         filename: 'server.js'
     },
 
