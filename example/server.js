@@ -19,19 +19,24 @@ export default function (req, res, next) {
         }
     };
 
-    then(di({page: 'page', 'env': 'env'}, {event}), ({page, env}) => {
-        console.time('Server render');
-        var body = env.render(page).toString();
-        console.timeEnd('Server render');
+    then(di({router: 'router', 'env': 'env'}, {event, di}), ({router, env}) => {
+        console.log(req.url);
 
-        let diData = JSON.stringify(di.serialize()).replace(/</gi, '&lt;');
-        // <link rel="stylesheet" href="styles.css"/>
-        let html = `<head></head><body>${body}<script>var diData=${diData};</script><script type="text/javascript" src="/assets/bundle.js"></script></body>`;
+        return router.match(req.url).then(({page}) => {
+            console.time('Server render');
+            var body = env.render(page).toString();
+            console.timeEnd('Server render');
 
-        res.send(html);
-        
-        di.destroy();
+            let diData = JSON.stringify(di.serialize()).replace(/</gi, '&lt;');
+            // <link rel="stylesheet" href="styles.css"/>
+            let html = `<head></head><body>${body}<script>var diData=${diData};</script><script type="text/javascript" src="/assets/bundle.js"></script></body>`;
+
+            res.send(html);
+
+            di.destroy();
+        }).catch(err=> console.log(err))
     }, (err) => {
+        console.log(err);
         next(err);
     });
 }

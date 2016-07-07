@@ -23,15 +23,9 @@ let di = createContainer(diConfig);
 di.put('renderer', new DomRenderer());
 di.put('request', new FetchRequest());
 
-let event = {
-    query: {
-        query: ''
-    }
-};
-
-then(di({page: 'page', 'env': 'env'}, {event}), ({page, env}) => {
-    console.time('Client render');
-    env.render(page, document.body.firstChild);
-    console.timeEnd('Client render');
+then(di({'env': 'env', router: 'router'}, {di}), ({env, router}) => {
+    return router.start().then(event => {
+        env.render(event.page, document.body.firstChild);
+    });
 });
 

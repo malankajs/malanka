@@ -6,7 +6,8 @@ export let diConfig = {
     resolvers: [
         webpackResolver([
             require.context('./models', true, /\.js$/),
-            require.context('./collections', true, /\.js$/)
+            require.context('./collections', true, /\.js$/),
+            require.context('./lib', true, /\.js$/)
         ]),
         staticResolver({
             Page,
@@ -16,9 +17,13 @@ export let diConfig = {
         })
     ],
     dependencies: {
+        // routes
+
+        home: 'homePage',
+
         // Components
 
-        page: ['Page', {
+        homePage: ['Page', {
             searchState: 'searchState',
             repositories: 'repositories',
             model: 'model'
@@ -41,6 +46,8 @@ export let diConfig = {
 
         env: ['Environment', {
             renderer: 'renderer'
-        }]
+        }],
+
+        router: 'Router'
     }
 };
