@@ -10,7 +10,8 @@ export class Router extends AbstractRouter {
     static factory({di}) {
         var router = new Router({
             routes: {
-                '/': 'home'
+                '/': 'home',
+                '/test': 'test'
             }
         });
 

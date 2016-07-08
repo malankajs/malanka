@@ -1,10 +1,10 @@
 import {Component, Defaults} from '../../../es5';
 
-import template from './Page.hbs';
-import styles from './Page.css';
+import template from './HomePage.hbs';
+import styles from './HomePage.css';
 
 @Defaults({styles, template})
-export class Page extends Component {
+export class HomePage extends Component {
 
     onSearch(event) {
         console.log(event);

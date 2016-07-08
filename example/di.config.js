@@ -1,5 +1,5 @@
 import {webpackResolver, staticResolver} from 'di.js/build/di.es5';
-import {Page} from './components/Page/Page';
+import {BodyContainer} from './components/BodyContainer/BodyContainer';
 import {Environment, Model, Collection} from '../es5';
 
 export let diConfig = {
@@ -7,10 +7,11 @@ export let diConfig = {
         webpackResolver([
             require.context('./models', true, /\.js$/),
             require.context('./collections', true, /\.js$/),
-            require.context('./lib', true, /\.js$/)
+            require.context('./lib', true, /\.js$/),
+            require.context('./components', true, /(Page|Header)\.js$/)
         ]),
         staticResolver({
-            Page,
+            BodyContainer,
             Environment,
             Model,
             Collection
@@ -19,15 +20,32 @@ export let diConfig = {
     dependencies: {
         // routes
 
-        home: 'homePage',
+        home: ['!BodyContainer', {
+            content: 'homePage'
+        }],
 
-        // Components
+        test: ['!BodyContainer', {
+            content: 'testPage'
+        }],
 
-        homePage: ['Page', {
+        // Pages
+
+        BodyContainer: {
+            env: 'env',
+            header: 'Header'
+        },
+
+        homePage: ['HomePage', {
             searchState: 'searchState',
             repositories: 'repositories',
             model: 'model'
         }],
+
+        testPage: ['TestPage', {
+
+        }],
+        
+        // Components
 
         // Data models & collections
         

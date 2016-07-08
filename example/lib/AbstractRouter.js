@@ -7,7 +7,7 @@ export class AbstractRouter {
         this.routes = [];
         this.index = {};
         this.middlewares = [];
-        
+
         this.buildRoutes(routes);
     }
 
@@ -16,7 +16,7 @@ export class AbstractRouter {
      */
     buildRoutes(routes) {
         Object.keys(routes).forEach(route => {
-            this.addRoute(routes[route], route);    
+            this.addRoute(routes[route], route);
         });
     }
 
@@ -62,7 +62,7 @@ export class AbstractRouter {
      * @returns {Promise<{name: string}>}
      */
     match(input) {
-        let [baseUrl, hash = ''] = input.split('#'),
+        let [baseUrl, hash = ''] = input.replace(/^https?:\/\/[^\/]+/, '').split('#'),
             [url, queryString = ''] = baseUrl.split('?'),
             queryParts = queryString.split('&'),
             query = {},
@@ -103,7 +103,7 @@ export class AbstractRouter {
         value = decodeURIComponent(value);
 
         if (value === 'true' || value === 'false') {
-            return  value === 'true';
+            return value === 'true';
         } else {
             let num = Number(value);
 
@@ -129,7 +129,14 @@ export class AbstractRouter {
         window.addEventListener('popstate', () => {
             this.matchCurrentUrl();
         });
-        
+
+        document.body.addEventListener('click', (event) => {
+            if (event.target.tagName.toLowerCase() === 'a') {
+                event.preventDefault();
+                this.navigate(event.target.href);
+            }
+        });
+
         return this.matchCurrentUrl();
     }
 
@@ -137,9 +144,32 @@ export class AbstractRouter {
      * @returns {Promise<{name: string}>}
      */
     matchCurrentUrl() {
-        let url = location.href.replace(/^https?:\/\/[^\/]+/, '');
-
-        return this.match(url);
+        return this.match(location.href);
     }
-    
+
+    /**
+     * @param {string} url
+     * @param {boolean} replace
+     * @param {boolean} trigger
+     * @param {{}} state
+     */
+    navigate(url, {replace = false, trigger = true, state = null} = {}) {
+        let currentUrl = location.href;
+
+        if (replace) {
+            history.replaceState(state, '', url);
+        } else {
+            history.pushState(state, '', url);
+        }
+
+        if (trigger) {
+            return this.match(url).catch(err => {
+                history.replaceState(null, '', currentUrl);
+                throw err;
+            })
+        } else {
+            return Promise.resolve()
+        }
+    }
+
 }

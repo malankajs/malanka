@@ -10,4 +10,10 @@ import template from './Header.hbs';
 })
 export class Header extends Component {
 
+    render(...args) {
+        super.render(...args);
+
+        console.log('render')
+    }
+
 }
