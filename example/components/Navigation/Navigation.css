@@ -1,0 +1,21 @@
+.root {
+    padding: 0 30px;
+    font-size: 0;
+    float: right;
+}
+
+.link {
+    composes: font_normal from '../Base/Base.css';
+
+    display: inline-block;
+    text-decoration: none;
+    padding: 17px 22px;
+    color: #fff;
+    text-transform: uppercase;
+    border-bottom: 2px solid rgba(255,255,255,0);
+    transition: border-bottom-color .1s ease-out;
+}
+
+.link_current {
+    border-bottom: 2px solid rgba(255,255,255,0.7);
+}

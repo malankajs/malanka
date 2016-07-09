@@ -1,9 +1,17 @@
+import {ValueProxy} from '../../es5';
+
 export class AbstractRouter {
 
     /**
      * @param {{}} routes
      */
     constructor({routes}) {
+        this._route = new ValueProxy({
+            get: () => {
+                return this._lastEvent && this._lastEvent.name;
+            }
+        });
+        
         this.routes = [];
         this.index = {};
         this.middlewares = [];
@@ -26,6 +34,8 @@ export class AbstractRouter {
      */
     addRoute(name, route) {
         let names = [];
+
+        this.index[name] = route;
 
         route = route.replace(/\(([^)]+)\)/g, (match, value) => {
             return '(?:' + value + ')?';
@@ -83,6 +93,9 @@ export class AbstractRouter {
         }
 
         if (event) {
+            this._lastEvent = event;
+            this._route.emit(event.name);
+            
             return this.middlewares.reduce((promise, middleware) => {
                 return promise.then(middleware).then(() => event);
             }, Promise.resolve(event));
@@ -113,6 +126,16 @@ export class AbstractRouter {
         }
 
         return value;
+    }
+
+    /**
+     * @param {string} route
+     * @param {{}} params
+     * 
+     * @returns {string}
+     */
+    reverse(route, params){
+        return this.index[route];
     }
 
     /**
@@ -172,4 +195,14 @@ export class AbstractRouter {
         }
     }
 
+    /**
+     * @param {string} name
+     * 
+     * @returns {ValueProxy}
+     */
+    isRoute(name) {
+        return this._route.mutate(route => {
+            return route === name;
+        });
+    }
 }

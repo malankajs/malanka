@@ -1,13 +1,17 @@
 .root {
     background: #00bcd4;
+    overflow: hidden;
 }
 
 .header {
-    font-size: 56px;
+    /*composes: font_header from '../Base/Base.css';*/
+    font-size: 20px;
     font-weight: 400;
+    font-family: "Roboto Mono", monospace;
     /*line-height: 1.5;*/
     color: white;
-    padding: 74px 0;
+    padding: 12px 12px 12px 24px;
     margin: auto;
-    width: 760px;
+    max-width: 760px;
+    float: left;
 }

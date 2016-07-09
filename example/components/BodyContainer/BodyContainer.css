@@ -1,0 +1,12 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto+Mono|Roboto&subset=latin,cyrillic);
+
+:global body, :global html {
+    font-family: "Roboto",sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #fefefe;
+}
+
+.root {
+    composes: font_normal from '../Base/Base.css';
+}

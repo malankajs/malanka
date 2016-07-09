@@ -50,4 +50,10 @@ describe('StylesOptimizer', function () {
         expect(result).to.equal('module.exports = function(context){return new Component({"attributes":{"class":(function(v0){return v0.mutate(function(){return __mergeStrings([context.styles.test1," ",context.if.call(context,context.test,{"hash":{},"isString":true,"content":function(){return __mergeStrings([" ",v0], context)}})], context).join(\'\')})})(context.proxy("v1"))}})}');
     });
 
+    it('transform class with helper and string params', function () {
+        let result = compiler.compileString('<div class="test1 {{test "abc"}}"></div>').split('\n').pop();
+
+        expect(result).to.equal('module.exports = function(context){return new Component({"attributes":{"class":(function(v0){return v0.mutate(function(){return __mergeStrings([context.styles.test1," ",context.if.call(context,context.test,{"hash":{},"isString":true,"content":function(){return __mergeStrings([" ",v0], context)}})], context).join(\'\')})})(context.proxy("v1"))}})}');
+    });
+
 });

@@ -1,5 +1,5 @@
 .root {
-    width: 760px;
+    max-width: 760px;
     margin: auto;
 }
 
@@ -12,6 +12,5 @@
 }
 
 .text {
-    font-size: 20px;
-    line-height: 32px;
+    composes: font_normal from '../Base/Base.css';
 }

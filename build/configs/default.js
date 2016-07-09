@@ -31,9 +31,14 @@ module.exports = () => {
         devtool: DEBUG ? 'inline-source-map' : false,
 
         plugins: [
-            new ComponentsScanner([
-                __dirname + '/../../example/components/**/*.js'
-            ], {
+            new ComponentsScanner({
+                helpers: [
+                    __dirname + '/../../example/helpers/*.js'
+                ],
+                components: [
+                    __dirname + '/../../example/components/**/*.js'
+                ]
+            }, {
                 optimize: {
                     plugins: [
                         new TrimSpacesOptimizer(),

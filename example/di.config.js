@@ -63,7 +63,8 @@ export let diConfig = {
         // Infrastructure
 
         env: ['Environment', {
-            renderer: 'renderer'
+            renderer: 'renderer',
+            router: 'router'
         }],
 
         router: 'Router'

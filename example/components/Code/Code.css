@@ -1,5 +1,6 @@
 .root {
     padding: 20px 0;
+    font-family: "Roboto Mono", monospace;
 }
 
 .root pre {
