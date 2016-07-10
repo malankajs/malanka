@@ -1,5 +1,6 @@
 exports.Prototype = require('./es5/Prototype').Prototype;
 exports.Defaults = require('./es5/Defaults').Defaults;
+exports.Mutator = require('./es5/Mutator').Mutator;
 
 exports.Environment = require('./es5/Environment').Environment;
 

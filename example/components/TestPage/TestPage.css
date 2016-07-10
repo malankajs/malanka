@@ -1,3 +1,7 @@
 .root {
     composes: root from "../Page/Page.css";
 }
+
+.table {
+    margin-top: 30px;
+}

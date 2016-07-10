@@ -36,13 +36,13 @@ export let diConfig = {
         },
 
         homePage: ['HomePage', {
-            searchState: 'searchState',
-            repositories: 'repositories',
             model: 'model'
         }],
 
         testPage: ['TestPage', {
-
+            searchState: 'searchState',
+            repositories: 'repositories',
+            calc: 'Calc'
         }],
         
         // Components

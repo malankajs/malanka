@@ -23,6 +23,7 @@ var serverConfig = Object.assign({}, config(), {
         'lodash': 'commonjs lodash',
         'express': 'commonjs express',
         'webpack': 'commonjs webpack',
+        'source-map': 'commonjs source-map',
         'source-map-support': 'commonjs source-map-support',
         'webpack-dev-middleware': 'commonjs webpack-dev-middleware'
     }

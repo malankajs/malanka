@@ -19,6 +19,10 @@
     "babel-plugin-transform-es2015-parameters",
     ["babel-plugin-transform-es2015-destructuring", {"loose": true}],
     "babel-plugin-transform-es2015-block-scoping",
-    ["babel-plugin-transform-es2015-modules-commonjs", {"loose": true}]
+    ["babel-plugin-transform-es2015-modules-commonjs", {"loose": true}],
+    ["babel-plugin-transform-runtime", {
+      "polyfill": false,
+      "regenerator": false
+    }]
   ]
 }

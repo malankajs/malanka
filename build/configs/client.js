@@ -22,7 +22,7 @@ clientConfig.module.loaders.push({
     loader: 'style!' + clientConfig.styles
 });
 
-if (!config.debug) {
+if (config.DEBUG) {
     clientConfig.entry.index.push('webpack-dev-server/client?http://localhost:8080/');
 }
 

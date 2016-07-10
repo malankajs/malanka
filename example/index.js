@@ -1,3 +1,5 @@
+import {staticResolver} from 'di.js/build/di.es5';
+
 import {DomRenderer} from '../es5/Renderer/DomRenderer';
 import {FetchRequest} from '../es5/Request/FetchRequest';
 
@@ -18,10 +20,12 @@ diConfig.factories = [
     createInstanceFactory()
 ];
 
+diConfig.resolvers.push(staticResolver({FetchRequest}));
+diConfig.dependencies.request = 'FetchRequest';
+
 let di = createContainer(diConfig);
 
 di.put('renderer', new DomRenderer());
-di.put('request', new FetchRequest());
 
 then(di({'env': 'env', router: 'router'}, {di}), ({env, router}) => {
     return router.start().then(event => {

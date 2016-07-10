@@ -16,8 +16,11 @@ export class Router extends AbstractRouter {
         });
 
         router.use(event => {
-            return then(di(event.name, {event}), page => {
+            let session = di.session({event});
+
+            return then(session(event.name), page => {
                 event.page = page;
+                session.close();
             });
         });
 

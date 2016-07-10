@@ -1,0 +1,14 @@
+<h2>Repositories</h2>
+
+<div class="filter">
+    <Input value=@searchState.query />
+</div>
+
+<div class="table">
+    <RepositoriesTable collection=repositories />
+</div>
+
+<Input value=@calc.a />
+<Input value=@calc.b />
+
+{{@calc.a}} + {{@calc.b}} = {{@calc.sum}}

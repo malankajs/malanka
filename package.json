@@ -7,7 +7,8 @@
     "start": "node start.js",
     "test": "mocha --compilers js:babel-register",
     "peg": "pegjs lib/Template/gramma.peg lib/Template/TemplateParser.js",
-    "es5": "babel -w -s inline -d es5 lib"
+    "es5": "babel -w -s inline -d es5 lib",
+    "build": "NODE_ENV=production ./node_modules/.bin/webpack --optimize"
   },
   "author": "",
   "license": "ISC",
@@ -62,6 +63,8 @@
   },
   "dependencies": {
     "di.js": "^1.8.0",
-    "glob": "^7.0.5"
+    "glob": "^7.0.5",
+    "promise-loader": "^1.0.0",
+    "whatwg-fetch": "^1.0.0"
   }
 }
