@@ -11,17 +11,18 @@ var clientConfig = require('./configs/client');
 var serverPath = '../dist/server/server.js';
 
 var server = new Webpack(serverConfig, (err, stats) => {
+    console.log(stats.toString({colors: true}));
+    
     if (err) {
         console.log(err, err.stack);
     } else {
+
         try {
             delete require.cache[require.resolve(serverPath)];
         } catch (err) {
         }
-
         console.log('REBUILD SERVER');
     }
-    console.log(stats.toString({colors: true}));
 });
 
 var client = new Webpack(clientConfig);
