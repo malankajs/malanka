@@ -55,6 +55,12 @@ ValuedAttribute
       value: value
     };
   }
+  / name:AttributeName '=' value:CallExpression {
+    return {
+      name: name,
+      value: value
+    }
+  }
   / name:AttributeName '=' value:Expression {
     return {
       name: name,
@@ -219,6 +225,19 @@ InlineExpression = '(' path:ExpressionName params:ExpressionAttributes? hash:Exp
         path: path,
         params: params,
         hash: hash
+    }
+}
+CallExpressionAtribute
+	= ',' value:CallExpressionAtribute {return value}
+	/ spaces? value:ExpressionHashValue {return value}
+
+CallExpressionAtributes = CallExpressionAtribute*
+
+CallExpression = path:ExpressionName '(' params:CallExpressionAtributes ')' {
+	return {
+    	type: 'CallExpression',
+        path: path,
+        params: params
     }
 }
 

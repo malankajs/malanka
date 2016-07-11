@@ -1,0 +1,40 @@
+.root {
+    margin-bottom: 30px;
+
+    position: relative;
+}
+
+.title {
+    border: 1px solid #999;
+    border-radius: 3px;
+    min-height: 24px;
+    line-height: 24px;
+    padding: 5px 10px;
+}
+
+.menu {
+    display: none;
+    position: absolute;
+    width: 100%;
+    background: white;
+    border: 1px solid #999;
+    border-radius: 3px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.menu_open {
+    display: block;
+}
+
+.item {
+    padding: 5px 10px;
+}
+
+.item:hover {
+    background: yellow;
+}
+
+.item_current {
+    background: #999;
+}

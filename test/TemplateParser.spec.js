@@ -272,8 +272,8 @@ describe('Template parser', function () {
             })
         });
 
-        describe('block helpers', function() {
-            it('parse content', function() {
+        describe('block helpers', function () {
+            it('parse content', function () {
                 expect(parse('{{#test}}test{{/test}}')).to.eql([{
                     type: 'BlockExpression',
                     path: 'test',
@@ -286,7 +286,7 @@ describe('Template parser', function () {
                     inverse: null
                 }]);
             });
-            it('parse inverse', function() {
+            it('parse inverse', function () {
                 expect(parse('{{#test}}test{{else}}test2{{/test}}')).to.eql([{
                     type: 'BlockExpression',
                     path: 'test',
@@ -449,8 +449,8 @@ describe('Template parser', function () {
         });
     });
 
-    describe('comments', function() {
-        it('parse html comments', function() {
+    describe('comments', function () {
+        it('parse html comments', function () {
             expect(parse('<!--<div>-->')).to.eql([
                 {
                     type: 'Comment',
@@ -458,7 +458,7 @@ describe('Template parser', function () {
                 }
             ])
         });
-        it('parse hbs comments', function() {
+        it('parse hbs comments', function () {
             expect(parse('{{!<div>}}')).to.eql([
                 {
                     type: 'Comment',
@@ -466,13 +466,52 @@ describe('Template parser', function () {
                 }
             ])
         });
-        it('parse hbs comments', function() {
+        it('parse hbs comments', function () {
             expect(parse('{{!--{{val}}--}}')).to.eql([
                 {
                     type: 'Comment',
                     content: '{{val}}'
                 }
             ])
+        });
+    });
+
+    describe('Call expressions', function () {
+        it('parse empty call', function () {
+            expect(parse('<div onclick=onClick()></div>')).to.eql([{
+                "attributes": [{
+                    "name": "onclick",
+                    "value": {
+                        "params": [],
+                        "path": "onClick",
+                        "type": "CallExpression"
+                    }
+                }],
+                "content": [],
+                "name": "div",
+                "type": "BalancedTag"
+            }])
+        });
+    });
+
+    describe('Call expression with param', function () {
+        it('parse empty call', function () {
+            expect(parse('<div onclick=onClick(test)></div>')).to.eql([{
+                "attributes": [{
+                    "name": "onclick",
+                    "value": {
+                        "params": [{
+                            "path": "test",
+                            "type": "Path"
+                        }],
+                        "path": "onClick",
+                        "type": "CallExpression"
+                    }
+                }],
+                "content": [],
+                "name": "div",
+                "type": "BalancedTag"
+            }])
         });
     });
 });
