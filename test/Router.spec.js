@@ -120,4 +120,45 @@ describe('Router', function () {
         });
     });
 
+    it('reverse with params and condition', function() {
+        let url = router.reverse('cond', {
+            name: 'test',
+            cond: 'abc',
+            q: 'cde'
+        });
+
+        expect(url).to.equal('/cond/test/abc?q=cde');
+    });
+
+    it('reverse with params and without condition', function() {
+        let url = router.reverse('cond', {
+            name: 'test',
+            q: 'cde'
+        });
+
+        expect(url).to.equal('/cond/test?q=cde');
+    });
+
+    it('reverse with empty params and without condition', function() {
+        let url = router.reverse('cond', {
+            name: 'test',
+            q: 'cde',
+            q1: '',
+            q3: undefined,
+            q4: null
+        });
+
+        expect(url).to.equal('/cond/test?q=cde');
+    });
+
+    it('reverse with params and empty condition', function() {
+        let url = router.reverse('cond', {
+            name: 'test',
+            cond: null,
+            q: 'cde'
+        });
+
+        expect(url).to.equal('/cond/test?q=cde');
+    });
+
 });

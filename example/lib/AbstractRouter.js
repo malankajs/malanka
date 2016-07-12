@@ -134,8 +134,62 @@ export class AbstractRouter {
      * 
      * @returns {string}
      */
-    reverse(route, params){
-        return this.index[route];
+    reverse(route, params = {}){
+        var route = this.index[route],
+            keys = Object.keys(params);
+
+        let accept = (value) => value != null && value !== '';
+
+        let interpolate = (str) => {
+            return str.replace(/:([^)/]+)/g, (match, name) => {
+                var index = keys.indexOf(name);
+                if (index > -1 && accept(params[name])) {
+                    keys.splice(index, 1);
+
+                    return encodeURIComponent(String(params[name]));
+                } else {
+                    return match;
+                }
+            });
+        };
+
+        route = route.replace(/\(([^)]+)\)/g, (match, value) => {
+            let str = interpolate(value);
+
+            if (str !== value) {
+                return str;
+            } else {
+                return '';
+            }
+        });
+
+        route = interpolate(route);
+
+        if (keys.length) {
+            let query = [];
+
+            keys.forEach(key => {
+                if (accept(params[key])) {
+                    query.push(`${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`);
+                }
+            });
+
+            if (query.length) {
+                route += '?' + query.join('&');
+            }
+        }
+
+        return route;
+    }
+
+    /**
+     * @param {{}} replaceQuery
+     * @returns {string}
+     */
+    reverseReplace(replaceQuery) {
+        let {name, params, query} = this._lastEvent;
+
+        return this.reverse(name, Object.assign({}, params, query, replaceQuery));
     }
 
     /**
@@ -177,6 +231,10 @@ export class AbstractRouter {
      * @param {{}} state
      */
     navigate(url, {replace = false, trigger = true, state = null} = {}) {
+        if (typeof history === 'undefined') {
+            return Promise.resolve();
+        }
+
         let currentUrl = location.href;
 
         if (replace) {
@@ -193,6 +251,16 @@ export class AbstractRouter {
         } else {
             return Promise.resolve()
         }
+    }
+
+    /**
+     * @param {{}} query
+     * @param {{}} options
+     *
+     * @returns {Promise}
+     */
+    replace(query, options) {
+        return this.navigate(this.reverseReplace(query), options);
     }
 
     /**

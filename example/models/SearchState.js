@@ -8,9 +8,17 @@ import {Model, Prototype} from '../../es5';
 export class SearchState extends Model {
 
     /**
+     */
+    navigate() {
+        this.router.replace({query: this.query}, {trigger: false});
+    }
+
+    /**
+     * @param {Router} router
      * @param {string} query
      */
-    updateDependencies({event: {query: {query}}}) {
+    updateDependencies({router, event: {query: {query}}}) {
+        this.set('router', router);
         this.set('query', String(query || ''));
     }
 

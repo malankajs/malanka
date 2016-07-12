@@ -3,7 +3,7 @@
 <Select collection=repositories value=@calc.select textFrom="full_name" valueFrom="full_name" />
 
 <div class="filter">
-    <Input value=@searchState.query />
+    <Input value=@searchState.query onenter=searchState.navigate />
 </div>
 
 <div class="table">

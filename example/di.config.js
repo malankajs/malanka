@@ -58,7 +58,9 @@ export let diConfig = {
 
         // States
 
-        searchState: 'SearchState',
+        searchState: ['SearchState', {
+            router: 'router'
+        }],
 
         // Infrastructure
 
