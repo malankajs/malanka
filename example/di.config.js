@@ -28,6 +28,10 @@ export let diConfig = {
             content: 'testPage'
         }],
 
+        error: ['!BodyContainer', {
+            content: 'errorPage'
+        }],
+
         // Pages
 
         BodyContainer: {
@@ -43,6 +47,10 @@ export let diConfig = {
             searchState: 'searchState',
             repositories: 'repositories',
             calc: 'Calc'
+        }],
+
+        errorPage: ['ErrorPage', {
+
         }],
         
         // Components

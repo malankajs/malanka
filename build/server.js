@@ -1,9 +1,7 @@
-var Webpack = require('webpack');
-
-var WebpackDevServer = require('webpack-dev-server');
-
-var express = require('express');
 var fs = require('fs');
+
+var Webpack = require('webpack');
+var WebpackDevServer = require('webpack-dev-server');
 
 var serverConfig = require('./configs/server');
 var clientConfig = require('./configs/client');
@@ -12,7 +10,7 @@ var serverPath = '../dist/server/server.js';
 
 var server = new Webpack(serverConfig, (err, stats) => {
     console.log(stats.toString({colors: true}));
-    
+
     if (err) {
         console.log(err, err.stack);
     } else {
@@ -27,24 +25,18 @@ var server = new Webpack(serverConfig, (err, stats) => {
 
 var client = new Webpack(clientConfig);
 
-var app = express();
-
-app.use(function (req, res, next) {
-    require(serverPath).server.default(req, res, next);
-});
-
-app.listen(8081);
-
 var devServer = new WebpackDevServer(client, {
     publicPath: '/assets/',
     stats: {
         colors: true
     },
-    // filename: "bundle.js",
-    proxy: {
-        '*': 'http://localhost:8081'
-    }
+    features: ["setup", "headers", "middleware"]
+});
+
+devServer.use(function (req, res, next) {
+    require(serverPath).server.default(req, res, next);
 });
 
 devServer.listen(8080, "localhost", function () {
+    console.log('Started at http://localhost:8080/');
 });

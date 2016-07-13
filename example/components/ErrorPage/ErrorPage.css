@@ -1,0 +1,4 @@
+.root {
+    composes: root from '../Page/Page.css';
+    composes: font_mono from '../Base/Base.css';
+}

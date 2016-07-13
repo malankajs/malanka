@@ -92,16 +92,23 @@ export class AbstractRouter {
             event = this.routes[index](url, query, hash);
         }
 
+        let promise = event ?
+            Promise.resolve(event) :
+            Promise.reject(new Error('Cannot match url "' + url + '"'));
+
         if (event) {
             this._lastEvent = event;
             this._route.emit(event.name);
-            
-            return this.middlewares.reduce((promise, middleware) => {
-                return promise.then(middleware).then(() => event);
-            }, Promise.resolve(event));
         } else {
-            return Promise.reject(new Error('Cannot match url "' + url + '"'));
+            event = {
+                name: 'error',
+                code: 404
+            };
         }
+
+        return this.middlewares.reduce((promise, [success, error]) => {
+            return promise.then(success, error ? error.bind(null, event) : null).then(() => event);
+        }, promise);
     }
 
     /**
@@ -193,10 +200,11 @@ export class AbstractRouter {
     }
 
     /**
-     * @param {function} middleware
+     * @param {function|null} success
+     * @param {function} [error]
      */
-    use(middleware) {
-        this.middlewares.push(middleware);
+    use(success, error) {
+        this.middlewares.push([success, error]);
     }
 
     /**

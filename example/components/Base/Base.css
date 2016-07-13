@@ -6,3 +6,7 @@
 .font_header {
     font-size: 56px;
 }
+
+.font_mono {
+    font-family: "Roboto Mono", monospace;
+}
