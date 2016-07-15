@@ -24,7 +24,8 @@ describe('Router', function () {
                 name: 'home',
                 params: {},
                 query: {},
-                hash: ''
+                hash: '',
+                state: undefined
             });
         });
     });
@@ -35,7 +36,8 @@ describe('Router', function () {
                 name: 'home',
                 params: {},
                 query: {},
-                hash: 'abc'
+                hash: 'abc',
+                state: undefined
             });
         });
     });
@@ -50,7 +52,8 @@ describe('Router', function () {
                     bool: true,
                     str: 'test'
                 },
-                hash: ''
+                hash: '',
+                state: undefined
             });
         });
     });
@@ -63,7 +66,8 @@ describe('Router', function () {
                 query: {
                     str: 'test'
                 },
-                hash: 'abc'
+                hash: 'abc',
+                state: undefined
             });
         });
     });
@@ -87,7 +91,8 @@ describe('Router', function () {
                     name2: 2
                 },
                 query: {},
-                hash: ''
+                hash: '',
+                state: undefined
             });
         });
     });
@@ -101,7 +106,8 @@ describe('Router', function () {
                     cond: 2
                 },
                 query: {},
-                hash: ''
+                hash: '',
+                state: undefined
             });
         });
     });
@@ -115,7 +121,8 @@ describe('Router', function () {
                     cond: undefined
                 },
                 query: {},
-                hash: ''
+                hash: '',
+                state: undefined
             });
         });
     });
