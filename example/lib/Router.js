@@ -8,14 +8,14 @@ export class Router extends AbstractRouter {
      * @returns {Router}
      */
     static factory({di}) {
-        var router = new Router({
+        let router = new Router({
             routes: {
                 '/': 'home',
                 '/test': 'test'
             }
         });
 
-        var session;
+        let session;
 
         router.use(
             event => {

@@ -32,7 +32,7 @@ export class AbstractRouter {
      * @param {string} name
      * @param {string} route
      */
-    addRoute(name, route) {
+    addRoute(name, route, state) {
         let names = [];
 
         this.index[name] = route;
@@ -60,7 +60,8 @@ export class AbstractRouter {
                     name,
                     params,
                     query,
-                    hash
+                    hash,
+                    state
                 };
             }
         });
@@ -71,7 +72,7 @@ export class AbstractRouter {
      *
      * @returns {Promise<{name: string}>}
      */
-    match(input) {
+    match(input, state) {
         let [baseUrl, hash = ''] = input.replace(/^https?:\/\/[^\/]+/, '').split('#'),
             [url, queryString = ''] = baseUrl.split('?'),
             queryParts = queryString.split('&'),
@@ -89,22 +90,23 @@ export class AbstractRouter {
         }
 
         for (let index = 0; index < this.routes.length && !event; index++) {
-            event = this.routes[index](url, query, hash);
+            event = this.routes[index](url, query, hash, state);
         }
 
         let promise = event ?
             Promise.resolve(event) :
             Promise.reject(new Error('Cannot match url "' + url + '"'));
 
-        if (event) {
-            this._lastEvent = event;
-            this._route.emit(event.name);
-        } else {
+        if (!event) {
             event = {
                 name: 'error',
-                code: 404
+                code: 404,
+                state
             };
         }
+
+        this._lastEvent = event;
+        this._route.emit(event.name);
 
         return this.middlewares.reduce((promise, [success, error]) => {
             return promise.then(success, error ? error.bind(null, event) : null).then(() => event);
@@ -136,13 +138,13 @@ export class AbstractRouter {
     }
 
     /**
-     * @param {string} route
+     * @param {string} routeName
      * @param {{}} params
      * 
      * @returns {string}
      */
-    reverse(route, params = {}){
-        var route = this.index[route],
+    reverse(routeName, params = {}){
+        var route = this.index[routeName],
             keys = Object.keys(params);
 
         let accept = (value) => value != null && value !== '';
@@ -211,8 +213,8 @@ export class AbstractRouter {
      * @returns {Promise<{name: string}>}
      */
     start() {
-        window.addEventListener('popstate', () => {
-            this.matchCurrentUrl();
+        window.addEventListener('popstate', (event) => {
+            this.matchCurrentUrl(event.state);
         });
 
         document.body.addEventListener('click', (event) => {
@@ -228,8 +230,8 @@ export class AbstractRouter {
     /**
      * @returns {Promise<{name: string}>}
      */
-    matchCurrentUrl() {
-        return this.match(location.href);
+    matchCurrentUrl(state = null) {
+        return this.match(location.href, state);
     }
 
     /**
