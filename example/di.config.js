@@ -1,6 +1,6 @@
 import {webpackResolver, staticResolver} from 'di.js/build/di.es5';
 import {BodyContainer} from './components/BodyContainer/BodyContainer';
-import {Environment, Model, Collection} from '../es5';
+import {Environment, Model, Collection, Planner} from '../es5';
 
 export let diConfig = {
     resolvers: [
@@ -13,8 +13,9 @@ export let diConfig = {
         staticResolver({
             BodyContainer,
             Environment,
-            Model,
-            Collection
+            Collection,
+            Planner,
+            Model
         })
     ],
     dependencies: {
@@ -26,6 +27,10 @@ export let diConfig = {
 
         test: ['!BodyContainer', {
             content: 'testPage'
+        }],
+
+        todo: ['!BodyContainer', {
+            content: 'todoPage'
         }],
 
         error: ['!BodyContainer', {
@@ -41,6 +46,10 @@ export let diConfig = {
 
         homePage: ['HomePage', {
             model: 'model'
+        }],
+
+        todoPage: ['TodoPage', {
+            tasks: 'Tasks'
         }],
 
         testPage: ['TestPage', {
@@ -74,7 +83,8 @@ export let diConfig = {
 
         env: ['Environment', {
             renderer: 'renderer',
-            router: 'router'
+            router: 'router',
+            planner: 'Planner'
         }],
 
         router: 'Router'

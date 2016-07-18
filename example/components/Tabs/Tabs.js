@@ -31,7 +31,7 @@ export class Tabs extends Component {
      * @returns {ValueProxy}
      */
     isActive(id) {
-        return this.state.proxy('active').mutate(active => active === id);
+        return this.state.proxy('active').pipe(active => active === id);
     }
 
     /**

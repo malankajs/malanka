@@ -1,9 +1,6 @@
-import chai from 'chai';
-import chaiAsPromised from 'chai-as-promised';
+import './config';
 import {expect} from 'chai';
 import {AbstractRouter} from '../example/lib/AbstractRouter';
-
-chai.use(chaiAsPromised);
 
 describe('Router', function () {
     let router;

@@ -1,6 +1,8 @@
 exports.Prototype = require('./es5/Prototype').Prototype;
 exports.Defaults = require('./es5/Defaults').Defaults;
 exports.Mutator = require('./es5/Mutator').Mutator;
+exports.PlannerWrite = require('./es5/PlannerWrite').PlannerWrite;
+exports.Planner = require('./es5/Planner').Planner;
 
 exports.Environment = require('./es5/Environment').Environment;
 

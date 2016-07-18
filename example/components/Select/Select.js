@@ -26,7 +26,7 @@ export class Select extends Component {
     }
     
     isCurrent(item) {
-        return this.currentItem.mutate(current => current === item);
+        return this.currentItem.pipe(current => current === item);
     }
 
     itemName(item) {

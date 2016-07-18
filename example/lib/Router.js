@@ -11,7 +11,8 @@ export class Router extends AbstractRouter {
         let router = new Router({
             routes: {
                 '/': 'home',
-                '/test': 'test'
+                '/test': 'test',
+                '/todo': 'todo'
             }
         });
 
@@ -29,8 +30,10 @@ export class Router extends AbstractRouter {
         );
 
         router.use(event => {
-            return then(session(event.name), page => {
-                event.page = page;
+            return then(di('env'), env => {
+                return then(session(event.name, {env}), page => {
+                    event.page = page;
+                });
             });
         });
 

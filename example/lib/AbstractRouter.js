@@ -279,7 +279,7 @@ export class AbstractRouter {
      * @returns {ValueProxy}
      */
     isRoute(name) {
-        return this._route.mutate(route => {
+        return this._route.pipe(route => {
             return route === name;
         });
     }

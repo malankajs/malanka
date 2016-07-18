@@ -1,3 +1,4 @@
+import './config';
 import {expect} from 'chai';
 
 import {ValueProxy} from '../lib/ValueProxy';
@@ -28,14 +29,14 @@ describe('ValueProxy', function () {
     });
 
     it('can mutate value', function () {
-        var proxy = model.proxy('value').mutate(value => value + '!');
+        var proxy = model.proxy('value').pipe(value => value + '!');
         expect(proxy.getValue()).to.equal('123!');
         model.set('value', 321);
         expect(proxy.getValue()).to.equal('321!');
     });
 
     it('can handle several proxies', function () {
-        var proxy = ValueProxy.fromArray([
+        var proxy = ValueProxy.all([
             model.proxy('value'),
             model.proxy('test')
         ]);
@@ -68,7 +69,7 @@ describe('ValueProxy', function () {
     it('fire event when model change on mutate', function () {
         let calledValue;
 
-        model.proxy('value').mutate(value => value + '!').on(value => calledValue = value);
+        model.proxy('value').pipe(value => value + '!').on(value => calledValue = value);
         model.set('value', 321);
 
         expect(calledValue).to.equal('321!');
@@ -77,25 +78,26 @@ describe('ValueProxy', function () {
     it('not fire event when model not change with mutate', function () {
         let calledValue;
 
-        model.proxy('value').mutate(value => value + '!').on(value => calledValue = value);
+        model.proxy('value').pipe(value => value + '!').on(value => calledValue = value);
         model.set('value', 123);
 
         expect(calledValue).to.equal(undefined);
     });
 
     it('not fire event when model change but mutate not change', function () {
-        let calledValue;
+        let calledCount = 0;
 
-        model.proxy('value').mutate(value => 'test').on(value => calledValue = value);
+        let proxy = model.proxy('value').pipe(value => 'test').on(value => calledCount++);
         model.set('value', 321);
 
-        expect(calledValue).to.equal(undefined);
+        expect(proxy.getValue()).to.equal('test');
+        expect(calledCount).to.equal(0);
     });
 
     it('fire event when model change with array ', function () {
         let calledValue;
 
-        ValueProxy.fromArray([model.proxy('value'), model.proxy('test')]).on(value => calledValue = value);
+        ValueProxy.all([model.proxy('value'), model.proxy('test')]).on(value => calledValue = value);
         model.set('value', 321);
 
         expect(calledValue).to.eql([321, 321]);
@@ -104,7 +106,7 @@ describe('ValueProxy', function () {
     it('not fire event when model not change with array ', function () {
         let calledValue;
 
-        ValueProxy.fromArray([model.proxy('value'), model.proxy('test')]).on(value => calledValue = value);
+        ValueProxy.all([model.proxy('value'), model.proxy('test')]).on(value => calledValue = value);
         model.set('value', 123);
 
         expect(calledValue).to.eql(undefined);
@@ -113,10 +115,41 @@ describe('ValueProxy', function () {
     it('fire event when model change with array with mutate', function () {
         let calledValue;
 
-        ValueProxy.fromArray([model.proxy('value'), model.proxy('test')]).mutate(value => value.join(' ')).on(value => calledValue = value);
+        ValueProxy.all([model.proxy('value'), model.proxy('test')])
+            .pipe(value => value.join(' '))
+            .on(value => calledValue = value);
+
         model.set('value', 321);
 
         expect(calledValue).to.eql('321 321');
+    });
+
+    it('handle promises then with no watch', function () {
+        let proxy = new ValueProxy(),
+            thenProxy = proxy.then(),
+            promise = Promise.resolve(123);
+
+        expect(thenProxy.getValue()).to.equal(undefined);
+        proxy.emitValue(promise);
+        expect(thenProxy.getValue()).to.equal(undefined);
+
+        return promise.then(() => {
+            expect(thenProxy.getValue()).to.equal(123);
+        });
+    });
+
+    it('handle promises then with watch', function () {
+        let proxy = new ValueProxy(),
+            thenProxy = proxy.then(),
+            promise = Promise.resolve(123),
+            calledValue;
+
+        thenProxy.on(value => calledValue = value);
+        proxy.emitValue(promise);
+
+        return promise.then(() => {
+            expect(calledValue).to.equal(123);
+        });
     });
 
 });

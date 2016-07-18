@@ -1,0 +1,10 @@
+{{#if @state.edit}}
+    <TodoForm taskName=@state.taskName oncreate=onSave />
+{{else}}
+    <Checkbox value=@task.done >
+        {{@task.title}}
+    </Checkbox>
+
+    <button class="remove" onclick=onRemove>Remove</button>
+    <button class="edit" onclick=onEdit>Edit</button>
+{{/if}}

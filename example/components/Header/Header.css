@@ -4,11 +4,10 @@
 }
 
 .header {
-    /*composes: font_header from '../Base/Base.css';*/
+    composes: font_mono from '../Base/Base.css';
+
     font-size: 20px;
     font-weight: 400;
-    font-family: "Roboto Mono", monospace;
-    /*line-height: 1.5;*/
     color: white;
     padding: 12px 12px 12px 24px;
     margin: auto;

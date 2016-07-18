@@ -1,0 +1,9 @@
+<h1 class="header">ToDo</h1>
+
+<div class="tasks">
+    {{#each tasks scope="task"}}
+        <TodoItem task=task />
+    {{/each}}
+</div>
+
+<TodoForm taskName=@state.taskName oncreate=onCreate />

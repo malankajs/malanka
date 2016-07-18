@@ -11,20 +11,18 @@ import template from './Code.hbs';
 })
 export class Code extends Component {
 
-    initialize(options) {
+    initialize() {
         let content = this.content;
 
         if (!Array.isArray(content)) {
             content = [content];
         }
 
-        this.code = ValueProxy.fromObject(content)
-            .mutate(content => content.join('').trim());
+        this.code = ValueProxy.fromValue(content)
+            .pipe(content => content.join('').trim());
     }
 
-    render(element) {
-        super.render(element);
-
+    onRender() {
         if (this.env.isBrowser) {
             require([
                 'prismjs',

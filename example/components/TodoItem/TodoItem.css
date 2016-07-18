@@ -1,0 +1,30 @@
+.root {
+    composes: font_normal from '../Base/Base.css';
+    padding: 10px 10px;
+}
+
+.root + .root {
+    border-top: 1px dotted #999;
+}
+
+.done {
+    composes: root;
+    text-decoration: line-through;
+}
+
+.button {
+    float: right;
+    display: none;
+}
+
+.edit {
+    composes: button;
+}
+
+.remove {
+    composes: button;
+}
+
+.root:hover .button {
+    display: inline-block;
+}
