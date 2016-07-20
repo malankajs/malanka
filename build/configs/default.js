@@ -1,4 +1,4 @@
-var ComponentsScanner = require('../../es5/ComponentsScanner').ComponentsScanner;
+var ComponentsScanner = require('../../es5/Build/ComponentsScanner').ComponentsScanner;
 var TrimSpacesOptimizer = require('../../es5/Template/optimizer/TrimSpacesOptimizer').TrimSpacesOptimizer;
 var StylesOptimizer = require('../../es5/Template/optimizer/StylesOptimizer').StylesOptimizer;
 var RequireOptimizer = require('../../es5/Template/optimizer/RequireOptimizer').RequireOptimizer;

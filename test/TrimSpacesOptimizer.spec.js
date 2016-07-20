@@ -38,13 +38,13 @@ describe('TrimSpacesOptimizer', function () {
         expect(result).to.equal('module.exports = function(context){return new Component({"content":new Component({})})}');
     });
 
-    it('correct compile components separated with space', function () {
+    it('correct compile Components separated with space', function () {
         let result = compiler.compileString('<div></div> <div></div>').split('\n').pop();
 
         expect(result).to.equal('module.exports = function(context){return [new Component({}),new Component({})]}');
     });
 
-    it('correct compile components separated with new line', function () {
+    it('correct compile Components separated with new line', function () {
         let result = compiler.compileString('<div></div> \n <div></div>').split('\n').pop();
 
         expect(result).to.equal('module.exports = function(context){return [new Component({}),new Component({})]}');

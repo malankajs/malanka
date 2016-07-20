@@ -4,7 +4,7 @@ import {RepositoryTableRow} from '../RepositoryTableRow/RepositoryTableRow';
 
 @Defaults({
     tagName: 'table',
-    childComponent: RepositoryTableRow
+    ChildComponent: RepositoryTableRow
 })
 export class RepositoriesTable extends CollectionComponent  {
     

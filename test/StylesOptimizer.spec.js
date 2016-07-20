@@ -47,7 +47,7 @@ describe('StylesOptimizer', function () {
     it('transform class with block helpers', function () {
         let result = compiler.compileString('<div class="test1 {{#if test}} {{@v1}}{{/if}}"></div>').split('\n').pop();
 
-        expect(result).to.equal('module.exports = function(context){return new Component({"attributes":{"class":(function(v0){return v0.pipe(function(){return __join(__mergeStrings([context.styles.test1," ",context.if.call(context,context.test,{"hash":{},"isString":true,"content":function(){return __mergeStrings([" ",v0], context)}})], context))})})(context.proxy("v1"))}})}');
+        expect(result).to.equal('module.exports = function(context){return new Component({"attributes":{"class":(function(v0){return v0.pipe(function(v0){return __join(__mergeStrings([context.styles.test1," ",context.if.call(context,context.test,{"hash":{},"isString":true,"content":function(){return __mergeStrings([" ",v0], context)}})], context))})})(context.proxy("v1"))}})}');
     });
 
     it('transform class with helper and string params', function () {

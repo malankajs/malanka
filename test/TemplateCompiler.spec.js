@@ -4,8 +4,8 @@ import {TrimSpacesOptimizer} from '../lib/Template/optimizer/TrimSpacesOptimizer
 import {TemplateCompiler} from '../lib/Template/TemplateCompiler';
 import {StringRenderer} from '../lib/Renderer/StringRenderer';
 import {Environment} from '../lib/Environment';
-import {Component} from '../lib/Component';
-import {Model} from '../lib/Model';
+import {Component} from '../lib/Components/Component';
+import {Model} from '../lib/Data/Model';
 
 let env = new Environment({
     renderer: new StringRenderer()
@@ -14,8 +14,8 @@ let env = new Environment({
 let compile = function (string) {
     let compiler = new TemplateCompiler({
         components: {
-            Component: require.resolve('../lib/Component'),
-            ValueProxy: require.resolve('../lib/ValueProxy')
+            Component: require.resolve('../lib/Components/Component'),
+            ValueProxy: require.resolve('../lib/Data/ValueProxy')
         },
         helpers: {
             json: require.resolve('./fixture/json.js')
@@ -192,7 +192,7 @@ describe('Template compiler', function () {
         var component = new Component({model});
 
         component.helper = function (value, options) {
-            if (value.getValue()) {
+            if (value) {
                 return options.content();
             }
         };

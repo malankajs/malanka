@@ -17,6 +17,7 @@ export default function (req, res, next) {
             });
         })
         .then(body => {
+            console.log(body);
             let diData = JSON.stringify(di.serialize()).replace(/</gi, '&lt;');
             return `<head><link rel="stylesheet" href="/assets/styles.css"></head><body>${body}<script>var diData=${diData};</script><script type="text/javascript" src="/assets/bundle.js"></script></body>`;
         })

@@ -1,6 +1,6 @@
 import {expect} from 'chai';
 
-import {Component} from '../lib/Component';
+import {Component} from '../lib/Components/Component';
 import {StringRenderer} from '../lib/Renderer/StringRenderer';
 import {Environment} from '../lib/Environment';
 

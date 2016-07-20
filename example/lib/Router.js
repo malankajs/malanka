@@ -1,4 +1,4 @@
-import {AbstractRouter} from './AbstractRouter';
+import {Router as AbstractRouter} from '../../es5/Router';
 import {then} from 'di.js/build/di.es5';
 
 export class Router extends AbstractRouter {

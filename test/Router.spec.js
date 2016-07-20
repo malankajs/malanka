@@ -1,12 +1,12 @@
 import './config';
 import {expect} from 'chai';
-import {AbstractRouter} from '../example/lib/AbstractRouter';
+import {Router} from '../lib/Router';
 
 describe('Router', function () {
     let router;
 
     beforeEach(function () {
-        router = new AbstractRouter({
+        router = new Router({
             routes: {
                 '/': 'home',
                 '/param/:name/:name2': 'param',

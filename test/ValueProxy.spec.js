@@ -1,8 +1,8 @@
 import './config';
 import {expect} from 'chai';
 
-import {ValueProxy} from '../lib/ValueProxy';
-import {Model} from '../lib/Model';
+import {ValueProxy} from '../lib/Data/ValueProxy';
+import {Model} from '../lib/Data/Model';
 
 describe('ValueProxy', function () {
     let model;

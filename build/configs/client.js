@@ -16,7 +16,7 @@ var clientConfig = Object.assign({}, config(), {
 });
 
 // clientConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
-clientConfig.plugins.push(new webpack.NoErrorsPlugin());
+// clientConfig.plugins.push(new webpack.NoErrorsPlugin());
 
 // clientConfig.module.loaders.push({
 //     test: /.css$/,
