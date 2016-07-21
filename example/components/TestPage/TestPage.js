@@ -5,8 +5,20 @@ import template from './TestPage.hbs';
 
 @Defaults({
     styles,
-    template
+    template,
+
+    stateDefaults: {
+        calc: false
+    }
 })
 export class TestPage extends Component {
-    
+
+    onCalc() {
+        this.state.set('calc', true);
+    }
+
+    onRepositories() {
+        this.state.set('calc', false);
+    }
+
 }

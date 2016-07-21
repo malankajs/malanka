@@ -1,4 +1,4 @@
-import {Collection, Prototype} from '../../es5';
+import {Collection, Prototype, Mutator} from '../../es5';
 import {Repository} from '../models/Repository';
 
 @Prototype({
@@ -7,42 +7,28 @@ import {Repository} from '../models/Repository';
 })
 export class Repositories extends Collection {
 
-    initialize() {
-        this.query = this.searchState.proxy('query');
-
-        this.query.on(() => this.update());
-    }
-
-    /**
-     * @returns {Promise}
-     */
-    update() {
-        var query = this.query.getValue();
-
-        if (query) {
-            return this._promise = Promise.resolve(this._promise)
-                .catch(() => {
-                    this._promise = null;
-                })
-                .then(() => {
-                    if (this.query.getValue() === query) {
-                        return this.fetch({
-                            remove: true,
-
-                            query: {
-                                q: query
-                            }
-                        });
-                    }
-                });
+    @Mutator('searchState.query', {
+        after: function(proxy) {
+            return proxy.then().pipe(() => this.models)
         }
-    }
+    })
+    update(query) {
+        return this._promise = Promise.resolve(this._promise)
+            .catch(() => {
+                // fix previous promise
+            })
+            .then(() => {
+                if (query && this.searchState.query === query) {
+                    return this.fetch({
+                        remove: true,
 
-    /**
-     * @returns {Promise}
-     */
-    updateDependencies() {
-        return this.update();
+                        query: {
+                            q: query
+                        }
+                    });
+                }
+            })
+            .then(() => this.models);
     }
 
     /**
@@ -51,6 +37,13 @@ export class Repositories extends Collection {
      */
     parse({items}) {
         return items;
+    }
+
+    /**
+     * @returns {Promise|Promise[]}
+     */
+    async() {
+        return this.update.getNestedPromises();
     }
 
 }

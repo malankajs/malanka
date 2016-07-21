@@ -8,16 +8,14 @@ export class Tasks extends Collection {
 
     initialize() {
         if (this.env.isBrowser) {
-            setTimeout(() => {
-                if (localStorage.tasks) {
-                    this.mergeModels(JSON.parse(localStorage.tasks));
-                }
+            if (localStorage.tasks) {
+                this.mergeModels(JSON.parse(localStorage.tasks));
+            }
 
-                this.on(() => this.save());
-                this.channel('remove').on(() => this.save());
-                this.channel('change:done').on(() => this.save());
-                this.channel('change:title').on(() => this.save());
-            });
+            this.on(() => this.save());
+            this.channel('remove').on(() => this.save());
+            this.channel('change:done').on(() => this.save());
+            this.channel('change:title').on(() => this.save());
         }
     }
 

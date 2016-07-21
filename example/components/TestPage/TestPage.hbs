@@ -1,16 +1,24 @@
 <h2>Repositories</h2>
 
-<Select collection=repositories value=@calc.select textFrom="full_name" valueFrom="full_name" />
+<button onclick=onCalc>Calc</button>
+<button onclick=onRepositories>Repositories</button>
 
+<h2>Filter</h2>
 <div class="filter">
     <Input value=@searchState.query onenter=searchState.navigate />
 </div>
 
-<div class="table">
-    <RepositoriesTable collection=repositories />
-</div>
+<h2>Content</h2>
+{{#if @state.calc}}
+    <Input value=@calc.a />
+    <Input value=@calc.b />
 
-<Input value=@calc.a />
-<Input value=@calc.b />
+    {{@calc.a}} + {{@calc.b}} = {{@calc.sum}}
+{{else}}
+    <Select collection=repositories.update value=@calc.select textFrom="full_name" valueFrom="full_name" />
 
-{{@calc.a}} + {{@calc.b}} = {{@calc.sum}}
+    <div class="table">
+        <RepositoriesTable collection=repositories.update />
+    </div>
+{{/if}}
+
