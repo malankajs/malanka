@@ -5,7 +5,11 @@
 
 <h2>Filter</h2>
 <div class="filter">
-    <Input value=@searchState.query onenter=searchState.navigate />
+    <Input
+            value=@searchState.query
+            onenter=searchState.navigate
+            placeholder="{{#if @state.calc}}Inactive github filter{{else}}Github filter{{/if}}"
+    />
 </div>
 
 <h2>Content</h2>

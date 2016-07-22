@@ -7,6 +7,11 @@ import {Repository} from '../models/Repository';
 })
 export class Repositories extends Collection {
 
+    /**
+     * @param {string} query
+     *
+     * @returns {ValueProxy}
+     */
     @Mutator('searchState.query', {
         after: function(proxy) {
             return proxy.then().pipe(() => this.models)

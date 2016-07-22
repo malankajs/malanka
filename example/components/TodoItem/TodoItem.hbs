@@ -1,4 +1,4 @@
-{{#if @state.edit}}
+{{#if @state.edit class="{{#if @state.edit}}mode_edit{{else}}mode_item{{/if}}"}}
     <TodoForm taskName=@state.taskName oncreate=onSave />
 {{else}}
     <Checkbox value=@task.done >

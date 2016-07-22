@@ -56,4 +56,10 @@ describe('StylesOptimizer', function () {
         expect(result).to.equal('module.exports = function(context){return new Component({"attributes":{"class":__join(__mergeStrings([context.styles.test1," ",context.test.call(context,"abc",{"hash":{},"isString":true})], context))}})}');
     });
 
+    it('transform class in helpers', function () {
+        let result = compiler.compileString('{{test class="abc"}}').split('\n').pop();
+
+        expect(result).to.equal('module.exports = function(context){return context.test.call(context,{"hash":{"class":context.styles.abc}})}');
+    });
+
 });

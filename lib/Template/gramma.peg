@@ -67,7 +67,7 @@ ValuedAttribute
       value: value
     }
   }
-  / name:AttributeName '=' value:AttributeExpressionParam {
+  / name:AttributeName '=' value:ExpressionPath {
     return {
       name: name,
       value: value
@@ -152,12 +152,6 @@ ExpressionPath = path:[@_a-zA-Z.0-9]+ {
 }
 
 ExpressionName = (!'else' name:[@_a-zA-Z_0-9.]+) { return name.join('') }
-AttributeExpressionParam = param:[^}"/#> ]+ {
-	return {
-    	type: 'Path',
-        path: param.join('')
-    };
-}
 
 ExpressionAttribute
 	= spaces value:Primitive { return value }

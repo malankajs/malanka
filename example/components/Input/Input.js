@@ -3,7 +3,7 @@ import {Component, Defaults} from '../../../es5';
 import template from './Input.hbs';
 import styles from './Input.css';
 
-@Defaults({styles, template})
+@Defaults({styles, template, placeholder: ''})
 export class Input extends Component {
 
     /**

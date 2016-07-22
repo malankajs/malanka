@@ -133,7 +133,7 @@ describe('ValueProxy', function () {
         proxy.emitValue(promise);
         expect(thenProxy.getValue()).to.equal(undefined);
 
-        return promise.then(() => {
+        return thenProxy._promise.then(() => {
             expect(thenProxy.getValue()).to.equal(123);
         });
     });
@@ -147,7 +147,7 @@ describe('ValueProxy', function () {
         thenProxy.on(value => calledValue = value);
         proxy.emitValue(promise);
 
-        return promise.then(() => {
+        return thenProxy._promise.then(() => {
             expect(calledValue).to.equal(123);
         });
     });
