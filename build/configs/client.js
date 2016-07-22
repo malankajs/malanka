@@ -23,12 +23,17 @@ var clientConfig = Object.assign({}, config(), {
 //     loader: 'style!' + clientConfig.styles
 // });
 
-clientConfig.module.loaders.push({
-    test: /.css$/,
-    loader: ExtractTextWebpackPlugin.extract(clientConfig.styles)
-});
 
-clientConfig.plugins.push(new ExtractTextWebpackPlugin('styles.css'));
+// var extractTextWebpackPlugin = new ExtractTextWebpackPlugin('styles.css', {
+//     allChunks: true
+// });
+//
+// clientConfig.module.loaders.push({
+//     test: /.css$/,
+//     loader: extractTextWebpackPlugin.extract(clientConfig.styles)
+// });
+//
+// clientConfig.plugins.push(extractTextWebpackPlugin);
 
 if (clientConfig.debug) {
     clientConfig.entry.index.push('webpack-dev-server/client?http://localhost:8080/');

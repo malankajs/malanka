@@ -1,5 +1,4 @@
 var config = require('./default');
-var ExtractTextWebpackPlugin = require('extract-text-webpack-plugin');
 
 var serverConfig = Object.assign({}, config(), {
     watch: true,
@@ -28,12 +27,5 @@ var serverConfig = Object.assign({}, config(), {
         'webpack-dev-middleware': 'commonjs webpack-dev-middleware'
     }
 });
-
-serverConfig.module.loaders.push({
-    test: /.css$/,
-    loader: ExtractTextWebpackPlugin.extract(serverConfig.styles)
-});
-
-serverConfig.plugins.push(new ExtractTextWebpackPlugin('styles.css'));
 
 module.exports = serverConfig;

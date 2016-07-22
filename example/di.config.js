@@ -8,7 +8,8 @@ export let diConfig = {
             require.context('./models', true, /\.js$/),
             require.context('./collections', true, /\.js$/),
             require.context('./lib', true, /\.js$/),
-            require.context('./components', true, /(Page|Header)\.js$/)
+            require.context('./components', true, /(Header)\.js$/),
+            require.context('bundle!./components', true, /Page\.js$/)
         ]),
         staticResolver({
             BodyContainer,

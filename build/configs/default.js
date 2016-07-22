@@ -3,6 +3,7 @@ var TrimSpacesOptimizer = require('../../es5/Template/optimizer/TrimSpacesOptimi
 var StylesOptimizer = require('../../es5/Template/optimizer/StylesOptimizer').StylesOptimizer;
 var RequireOptimizer = require('../../es5/Template/optimizer/RequireOptimizer').RequireOptimizer;
 var Webpack = require('webpack');
+var ExtractTextWebpackPlugin = require('extract-text-webpack-plugin');
 
 var DEBUG = process.env.NODE_ENV !== 'production';
 
@@ -12,6 +13,10 @@ var hotComponent = require.resolve('../hotComponent');
 
 
 module.exports = () => {
+    var extractTextWebpackPlugin = new ExtractTextWebpackPlugin('styles.css', {
+        allChunks: true
+    });
+
     var config = {
         info: true,
         debug: DEBUG,
@@ -25,7 +30,14 @@ module.exports = () => {
                     loader: /*hotComponent + */'babel?cacheDirectory',
                     exclude: /node_modules|es5/
                 },
-                {test: /.hbs$/, loader: require.resolve('../../es5/Template/loader')}
+                {
+                    test: /.hbs$/,
+                    loader: require.resolve('../../es5/Template/loader')
+                },
+                {
+                    test: /.css$/,
+                    loader: extractTextWebpackPlugin.extract('css?modules&importLoaders=1&localIdentName=' + className)
+                }
             ]
         },
         devtool: DEBUG ? 'inline-source-map' : false,
@@ -47,7 +59,8 @@ module.exports = () => {
                     ]
                 }
             }),
-            new Webpack.optimize.OccurenceOrderPlugin()
+            new Webpack.optimize.OccurenceOrderPlugin(),
+            extractTextWebpackPlugin
         ]
     };
 
@@ -60,7 +73,8 @@ module.exports = () => {
             compress: {
                 warnings: true
             }
-        }))
+        }));
+        config.plugins.push(new Webpack.optimize.DedupePlugin());
     }
     
     return config;
