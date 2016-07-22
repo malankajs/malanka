@@ -1,6 +1,9 @@
 import {Model, Prototype} from '../../es5';
 
 @Prototype({
+    idAttribute: '_id',
+    url: 'http://localhost:8080/api/tasks',
+
     defaults: {
         done: false
     }
@@ -8,9 +11,7 @@ import {Model, Prototype} from '../../es5';
 export class Task extends Model {
 
     initialize() {
-        if (!this.id) {
-            this.id = Date.now();
-        }
+        this.channel('change:done').on(() => this.save());
     }
 
 }

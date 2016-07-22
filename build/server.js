@@ -34,7 +34,7 @@ var devServer = new WebpackDevServer(client, {
 });
 
 devServer.use(function (req, res, next) {
-    require(serverPath).server.default(req, res, next);
+    require(serverPath).server.app(req, res, next);
 });
 
 devServer.listen(8080, "localhost", function () {

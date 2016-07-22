@@ -28,7 +28,7 @@ module.exports = () => {
                 {
                     test: /.js$/,
                     loader: /*hotComponent + */'babel?cacheDirectory',
-                    exclude: /node_modules|es5/
+                    exclude: /es5/
                 },
                 {
                     test: /.hbs$/,

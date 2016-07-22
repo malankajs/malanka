@@ -18,7 +18,7 @@ export class TodoPage extends Component {
         this.state.set('taskName', '');
 
         if (taskName) {
-            this.tasks.add({
+            this.tasks.create({
                 title: taskName
             });
         }

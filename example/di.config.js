@@ -9,7 +9,7 @@ export let diConfig = {
             require.context('./collections', true, /\.js$/),
             require.context('./lib', true, /\.js$/),
             require.context('./components', true, /(Header)\.js$/),
-            require.context('bundle!./components', true, /Page\.js$/)
+            require.context('./components', true, /Page\.js$/)
         ]),
         staticResolver({
             BodyContainer,
@@ -50,7 +50,7 @@ export let diConfig = {
         }],
 
         todoPage: ['TodoPage', {
-            tasks: 'Tasks'
+            tasks: 'tasks'
         }],
 
         testPage: ['TestPage', {
@@ -71,6 +71,10 @@ export let diConfig = {
         
         repositories: ['Repositories', {
             searchState: 'searchState',
+            request: 'request'
+        }],
+
+        tasks: ['Tasks', {
             request: 'request'
         }],
 
