@@ -1,7 +1,19 @@
-<h1 class="header">ToDo</h1>
+{{!--<h1 class="header">ToDo</h1>--}}
 
-{{#each tasks scope="task" class="tasks"}}
-    <TodoItem task=task></TodoItem>
-{{/each}}
+<div class="{{#if @tasksState.currentTask}}layout_right{{else}}layout{{/if}}">
+    <div class="left">
+        <TodoLists lists=lists tasksState=tasksState></TodoLists>
+    </div>
 
-<TodoForm taskName=@state.taskName oncreate=onCreate></TodoForm>
+    <div class="content">
+        <TodoForm taskName=@state.taskName oncreate=onCreate tasksState=tasksState></TodoForm>
+
+        {{#each tasks.forCurrentList scope="task" class="tasks"}}
+            <TodoItem task=task tasksState=tasksState></TodoItem>
+        {{/each}}
+    </div>
+
+    {{#watch @tasksState.currentTask notEmpty=true class="right"}}
+        <TodoDetails task=tasksState.currentTask tasksState=tasksState />
+    {{/watch}}
+</div>

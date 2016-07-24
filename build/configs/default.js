@@ -26,17 +26,21 @@ module.exports = () => {
         module: {
             loaders: [
                 {
-                    test: /.js$/,
+                    test: /\.js$/,
                     loader: /*hotComponent + */'babel?cacheDirectory',
                     exclude: /es5/
                 },
                 {
-                    test: /.hbs$/,
+                    test: /\.hbs$/,
                     loader: require.resolve('../../es5/Template/loader')
                 },
                 {
-                    test: /.css$/,
+                    test: /\.css$/,
                     loader: extractTextWebpackPlugin.extract('css?modules&importLoaders=1&localIdentName=' + className)
+                },
+                {
+                    test: /\.(svg|png)/,
+                    loader: 'file'
                 }
             ]
         },

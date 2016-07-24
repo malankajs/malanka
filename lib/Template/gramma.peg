@@ -49,31 +49,7 @@ Attributes = spaces attributes:Attribute* { return attributes; }
 Attribute = spaces? attr:(ValuedAttribute / ValuelessAttribute) { return attr; }
 
 ValuedAttribute
-  = name:AttributeName "=" value:EscapedString {
-    return {
-      name: name,
-      value: value
-    };
-  }
-  / name:AttributeName '=' value:CallExpression {
-    return {
-      name: name,
-      value: value
-    }
-  }
-  / name:AttributeName '=' value:Expression {
-    return {
-      name: name,
-      value: value
-    }
-  }
-  / name:AttributeName '=' value:ExpressionPath {
-    return {
-      name: name,
-      value: value
-    }
-  }
-  / name:AttributeName "=" value:AttributeValue {
+  = name:AttributeName "=" value:(EscapedString / CallExpression / Primitive / Expression / ExpressionPath / AttributeValue) {
     return {
       name: name,
       value: value

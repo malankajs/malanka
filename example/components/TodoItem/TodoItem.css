@@ -12,6 +12,10 @@
     text-decoration: line-through;
 }
 
+.current {
+    background: #e0eefa;
+}
+
 .button {
     float: right;
     display: none;

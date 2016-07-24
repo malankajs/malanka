@@ -1,5 +1,5 @@
-{{#if @state.edit class="{{#if @state.edit}}mode_edit{{else}}mode_item{{/if}}"}}
-    <TodoForm taskName=@state.taskName oncreate=onSave />
+{{#if @state.edit class="{{#if @state.edit}}mode_edit{{else}}mode_item{{/if}}" onclick=setCurrent}}
+    <TodoForm taskName=@state.taskName tasksState=tasksState oncreate=onSave />
 {{else}}
     <Checkbox value=@task.done >
         {{@task.title}}

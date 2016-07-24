@@ -19,7 +19,8 @@ export class TodoPage extends Component {
 
         if (taskName) {
             this.tasks.create({
-                title: taskName
+                title: taskName,
+                list: this.tasksState.currentList._id
             });
         }
     }

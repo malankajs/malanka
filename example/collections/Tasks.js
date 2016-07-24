@@ -7,8 +7,31 @@ import {Task} from '../models/Task';
 })
 export class Tasks extends Collection {
 
-    updateDependencies() {
-        return this.fetch();
+    /**
+     * @param {TasksState} tasksState
+     */
+    setTasksState(tasksState) {
+        this.tasksState = tasksState;
+    }
+
+
+    /**
+     * @returns {Promise<Collection>}
+     */
+    @Mutator('tasksState.currentList')
+    forCurrentList(currentList) {
+        if (!currentList) {
+            return this;
+        }
+
+        this._promise = this.fetch({
+            remove: true,
+            query: {
+                list: currentList._id
+            }
+        });
+
+        return this;
     }
 
 }

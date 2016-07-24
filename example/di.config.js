@@ -7,6 +7,7 @@ export let diConfig = {
         webpackResolver([
             require.context('./models', true, /\.js$/),
             require.context('./collections', true, /\.js$/),
+            require.context('./states', true, /\.js$/),
             require.context('./lib', true, /\.js$/),
             require.context('./components', true, /(Header)\.js$/),
             require.context('./components', true, /Page\.js$/)
@@ -50,7 +51,9 @@ export let diConfig = {
         }],
 
         todoPage: ['TodoPage', {
-            tasks: 'tasks'
+            tasks: 'currentTasks',
+            lists: 'lists',
+            tasksState: 'tasksState'
         }],
 
         testPage: ['TestPage', {
@@ -74,7 +77,17 @@ export let diConfig = {
             request: 'request'
         }],
 
-        tasks: ['Tasks', {
+        Tasks: {
+            request: 'request'
+        },
+
+        tasks: 'Tasks',
+
+        currentTasks: ['Tasks', {
+            tasksState: 'tasksState'
+        }],
+
+        lists: ['Lists', {
             request: 'request'
         }],
 
@@ -82,6 +95,10 @@ export let diConfig = {
 
         searchState: ['SearchState', {
             router: 'router'
+        }],
+
+        tasksState: ['TasksState', {
+            lists: 'lists'
         }],
 
         // Infrastructure

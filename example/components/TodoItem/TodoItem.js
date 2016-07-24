@@ -3,17 +3,31 @@ import {Component, Defaults, Mutator} from '../../../es5';
 import styles from './TodoItem.css';
 import template from './TodoItem.hbs';
 
+/**
+ * @property {TasksState} tasksState
+ */
 @Defaults({
     styles,
     template
 })
 export class TodoItem extends Component {
 
-    @Mutator('task.done')
-    className(done) {
-        return done ?
+    @Mutator(['task.done', 'current'])
+    className([done, current]) {
+        var classes = [done ?
             this.styles.done :
-            this.styles.root;
+            this.styles.root];
+
+        if (current) {
+            classes.push(this.styles.current);
+        }
+
+        return classes.join(' ');
+    }
+
+    @Mutator('tasksState.currentTask')
+    current(task) {
+        return this.task === task;
     }
 
     onEdit() {
@@ -32,6 +46,10 @@ export class TodoItem extends Component {
             this.task.set('title', title);
             this.state.set('edit', false);
         }
+    }
+
+    setCurrent() {
+        this.tasksState.setCurrentTask(this.task);
     }
 
 }

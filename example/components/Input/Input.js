@@ -20,6 +20,10 @@ export class Input extends Component {
         if (event.which === 13) {
             this.emitEvent('enter', event);
         }
+
+        if (event.which === 27) {
+            this.emitEvent('escape', event);
+        }
     }
 
 }

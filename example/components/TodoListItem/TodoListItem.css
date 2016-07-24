@@ -1,0 +1,16 @@
+.root {
+    padding: 0 10px 0 30px;
+    background: url("./TodoListItem.svg") no-repeat 5px 5px;
+    line-height: 30px;
+    cursor: pointer;
+}
+
+.root:hover {
+    background-color: #e0eefa;
+}
+
+.current {
+    composes: root;
+
+    background-color: #e0eefa;
+}

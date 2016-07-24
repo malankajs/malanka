@@ -1,0 +1,23 @@
+.root {
+    position: relative;
+    height: 100%;
+}
+
+.list {
+    padding-top: 10px;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+.create {
+    color: #328ad6;
+    font-size: 15px;
+    cursor: pointer;
+}
