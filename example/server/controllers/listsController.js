@@ -1,4 +1,4 @@
 import {crudFactory} from './crudFactory';
-import {List} from '../Entity/List';
+import {ListEntity} from '../Entity/ListEntity';
 
-export let listsController = crudFactory(List);
+export let listsController = crudFactory(ListEntity);

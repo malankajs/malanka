@@ -1,11 +1,12 @@
 import {Document} from 'camo';
 
-export class List extends Document {
+export class ListEntity extends Document {
 
     constructor() {
         super();
 
         this.title = String;
+        this.weight = Number;
     }
 
 }

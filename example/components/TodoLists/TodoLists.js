@@ -19,7 +19,6 @@ export class TodoLists extends Component {
     onCreate() {
         let title = this.state.title;
 
-
         if (title) {
             this.lists.create({title}).then(list => {
                 this.tasksState.setCurrentList(list);

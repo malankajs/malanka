@@ -1,6 +1,6 @@
 import {Document} from 'camo';
 
-export class Task extends Document {
+export class TaskEntity extends Document {
 
     constructor() {
         super();
@@ -8,6 +8,7 @@ export class Task extends Document {
         this.title = String;
         this.list = String;
         this.done = Boolean;
+        this.weight = Number;
     }
 
 }

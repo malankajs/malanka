@@ -27,7 +27,8 @@ export class Tasks extends Collection {
         this._promise = this.fetch({
             remove: true,
             query: {
-                list: currentList._id
+                list: currentList._id,
+                _order: 'weight'
             }
         });
 

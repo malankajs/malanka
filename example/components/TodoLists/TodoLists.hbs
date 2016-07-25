@@ -1,6 +1,8 @@
-{{#each lists scope="list" class="list"}}
-    <TodoListItem list=list tasksState=tasksState></TodoListItem>
-{{/each}}
+<TodoListItems collection=lists class="list" tasksState=tasksState></TodoListItems>
+
+{{!--{{#each lists scope="list" class="list"}}--}}
+    {{!--<TodoListItem list=list tasksState=tasksState onmousedown=onMouseDown(list)></TodoListItem>--}}
+{{!--{{/each}}--}}
 
 {{#if @state.create class="footer"}}
     <TodoListForm title=@state.title oncreate=onCreate onescape=setNormalMode></TodoListForm>

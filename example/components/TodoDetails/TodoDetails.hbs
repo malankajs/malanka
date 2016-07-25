@@ -1,4 +1,7 @@
-<TodoItem task=tasksState.currentTask tasksState=tasksState></TodoItem>
+<div class="header">
+    <Checkbox value=@task.done class="header_check"></Checkbox>
+    <Input value=@task.title class="header_input" />
+</div>
 
 <div class="footer">
     <div class="remove" title="Remove" onclick=onRemove></div>

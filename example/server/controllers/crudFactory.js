@@ -12,11 +12,31 @@ export function crudFactory(Model) {
     let app = new Router();
 
     app.get('/', wrap((req) => {
-        return Model.find(req.query);
+        let query = Object.assign({}, req.query),
+            options = {};
+
+        if (query._order) {
+            options = {sort: query._order};
+
+            delete query._order;
+        }
+
+        return Model.find(query, options);
     }));
 
     app.post('/', wrap((req) => {
         return Model.create(req.body).save();
+    }));
+
+    app.get('/:id', wrap((req, res) => {
+        return Model.findOne({_id: req.params.id})
+            .then(task => {
+                if (!task) {
+                    return res.status(404).json({error: 'Not found'});
+                }
+
+                return task;
+            });
     }));
 
     app.delete('/:id', wrap((req, res) => {

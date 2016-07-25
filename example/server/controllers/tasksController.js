@@ -1,4 +1,4 @@
 import {crudFactory} from './crudFactory';
-import {Task} from '../Entity/Task';
+import {TaskEntity} from '../Entity/TaskEntity';
 
-export let tasksController = crudFactory(Task);
+export let tasksController = crudFactory(TaskEntity);

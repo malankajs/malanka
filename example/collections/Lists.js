@@ -8,7 +8,11 @@ import {List} from '../models/List';
 export class Lists extends Collection {
 
     updateDependencies() {
-        return this.fetch();
+        return this.fetch({
+            query: {
+                _order: 'weight'
+            }
+        });
     }
 
 }

@@ -1,5 +1,3 @@
-{{!--<h1 class="header">ToDo</h1>--}}
-
 <div class="{{#if @tasksState.currentTask}}layout_right{{else}}layout{{/if}}">
     <div class="left">
         <TodoLists lists=lists tasksState=tasksState></TodoLists>
@@ -8,9 +6,7 @@
     <div class="content">
         <TodoForm taskName=@state.taskName oncreate=onCreate tasksState=tasksState></TodoForm>
 
-        {{#each tasks.forCurrentList scope="task" class="tasks"}}
-            <TodoItem task=task tasksState=tasksState></TodoItem>
-        {{/each}}
+        <TodoItems collection=tasks.forCurrentList class="tasks" tasksState=tasksState></TodoItems>
     </div>
 
     {{#watch @tasksState.currentTask notEmpty=true class="right"}}

@@ -3,6 +3,24 @@
     height: 100%;
 }
 
+.header {
+    background: #e0eefa;
+    line-height: 30px;
+    position: absolute;
+}
+
+    .header_check {
+        position: absolute;
+        left: 5px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .header_input {
+        composes: input_side from '../Input/Input.css';
+        display: inline-block;
+    }
+
 .footer {
     position: absolute;
     bottom: 0;

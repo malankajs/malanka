@@ -7,29 +7,35 @@ import {Model, Prototype} from '../../es5';
 })
 export class TasksState extends Model {
 
+    initialize() {
+        this.channel('change:currentList').on(() => {
+            this.setCurrentTask(null);
+        });
+    }
+
     /**
-     * @param {List} currentList
+     * @param {ListEntity} currentList
      */
     setCurrentList(currentList) {
         this.set('currentList',currentList);
     }
 
     /**
-     * @returns {List}
+     * @returns {ListEntity}
      */
     getCurrentList() {
         return this.get('currentList');
     }
 
     /**
-     * @param {Task} task
+     * @param {TaskEntity} task
      */
     setCurrentTask(task) {
         this.set('currentTask', task);
     }
 
     /**
-     * @returns {Task}
+     * @returns {TaskEntity}
      */
     getCurrentTask() {
         return this.get('currentTask');

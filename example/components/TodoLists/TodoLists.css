@@ -20,4 +20,7 @@
     color: #328ad6;
     font-size: 15px;
     cursor: pointer;
+    background: url('./TodoListsCreate.svg') no-repeat;
+    padding-left: 30px;
+    line-height: 20px;
 }

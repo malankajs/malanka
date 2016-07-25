@@ -7,9 +7,22 @@
     margin-top: 10px;
 }
 
+.input_side {
+    composes: root;
+
+    border: none;
+    padding-left: 28px;
+}
+
+    .input_side .input {
+        background: #e0eefa;
+    }
+
 .input {
     border: 0;
     padding: 6px;
     width: 100%;
     font-size: 20px;
+    outline: none;
 }
+
