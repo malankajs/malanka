@@ -1,5 +1,6 @@
 .root {
     /*composes: root from '../Page/Page.css';*/
+    min-width: 600px;
 }
 
 .tasks {

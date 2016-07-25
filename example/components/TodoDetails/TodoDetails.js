@@ -10,9 +10,11 @@ import template from './TodoDetails.hbs';
 export class TodoDetails extends Component {
 
     onRemove() {
-        return this.task.remove().then(() => {
-            this.tasksState.setCurrentTask(null);
-        });
+        return this.task.remove().then(() => this.onClose());
+    }
+
+    onClose() {
+        this.tasksState.setCurrentTask(null);
     }
 
 }

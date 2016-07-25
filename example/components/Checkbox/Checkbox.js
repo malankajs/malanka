@@ -10,20 +10,8 @@ import template from './Checkbox.hbs';
 })
 export class Checkbox extends Component {
 
-    initialize() {
-        this.listenTo(this.value, value => this.copyValueToCheck());
-    }
-
-    onRender() {
-        this.copyValueToCheck();
-    }
-
-    onChange(event) {
-        this.value.setValue(event.currentTarget.checked);
-    }
-
-    copyValueToCheck() {
-        this.check.getElement().checked = Boolean(this.value.getValue());
+    onClick() {
+        this.value.setValue(!this.value.getValue());
     }
 
 }

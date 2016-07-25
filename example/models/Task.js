@@ -14,6 +14,7 @@ export class Task extends Model {
         this.channel('change:title').on(() => this.save());
         this.channel('change:done').on(() => this.save());
         this.channel('change:weight').on(() => this.save());
+        this.channel('change:list').on(() => this.save());
     }
 
     /**

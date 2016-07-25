@@ -1,10 +1,17 @@
 .root {
     composes: font_normal from '../Base/Base.css';
-    padding: 10px 10px;
+    padding: 5px 10px;
+
+    /*border: 1px solid #999;*/
+    border-radius: 3px;
+    width: 100%;
+    box-sizing: border-box;
+    background: #f7f7f7;
 }
 
 .root + .root {
-    border-top: 1px dotted #999;
+    margin-top: 1px;
+    /*border-top: 1px dotted #999;*/
 }
 
 .done {

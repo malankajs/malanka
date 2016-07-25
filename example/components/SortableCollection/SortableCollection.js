@@ -32,10 +32,8 @@ export class SortableCollection extends CollectionComponent {
                 };
             });
 
-            let placeholder = document.createElement('div');
+            let placeholder = element.cloneNode(true);
             placeholder.classList.add(styles.placeholder);
-            placeholder.style.height = box.height;
-            placeholder.style.width = box.width;
 
             let target = document.createElement('div');
             target.classList.add(styles.target);
@@ -43,9 +41,14 @@ export class SortableCollection extends CollectionComponent {
             event.preventDefault();
 
             let onMouseMove = (moveEvent) => {
-                var top = box.top - parentBox.top + moveEvent.pageY - event.pageY;
+                let offset = moveEvent.pageY - event.pageY;
+                var top = box.top - parentBox.top + offset;
 
                 if (!isMoved) {
+                    if (Math.abs(offset) < 10) {
+                        return;
+                    }
+
                     container.insertBefore(placeholder, element);
 
                     element.style.top = box.top - parentBox.top;

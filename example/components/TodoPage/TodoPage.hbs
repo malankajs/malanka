@@ -10,6 +10,6 @@
     </div>
 
     {{#watch @tasksState.currentTask notEmpty=true class="right"}}
-        <TodoDetails task=tasksState.currentTask tasksState=tasksState />
+        <TodoDetails task=tasksState.currentTask tasksState=tasksState lists=lists />
     {{/watch}}
 </div>

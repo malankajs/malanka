@@ -6,10 +6,13 @@
 .header {
     background: #e0eefa;
     line-height: 30px;
-    position: absolute;
+    position: relative;
+    padding: 5px 0;
 }
 
     .header_check {
+        composes: root from '../Checkbox/Checkbox.css';
+
         position: absolute;
         left: 5px;
         top: 50%;
@@ -20,6 +23,27 @@
         composes: input_side from '../Input/Input.css';
         display: inline-block;
     }
+
+.list {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+
+    align-items: center;
+    padding: 10px 5px 10px 0;
+    box-sizing: border-box;
+}
+
+.list_icon {
+    composes: list from '../Icon/Icon.css';
+
+    margin: 8px;
+}
+
+.list_select {
+
+}
+
 
 .footer {
     position: absolute;
@@ -33,6 +57,13 @@
 .remove {
     background: url('./TodoDetailsRemove.svg') no-repeat;
     float: right;
+    width: 20px;
+    height: 20px;
+}
+
+.close {
+    background: url('./TodoDetailsClose.svg') no-repeat;
+    float: left;
     width: 20px;
     height: 20px;
 }

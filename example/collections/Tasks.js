@@ -7,6 +7,14 @@ import {Task} from '../models/Task';
 })
 export class Tasks extends Collection {
 
+    initialize() {
+        this.channel('change:list').on(task => {
+            if (this._lastQuery.list !== task) {
+                this.remove(task);
+            }
+        });
+    }
+
     /**
      * @param {TasksState} tasksState
      */
