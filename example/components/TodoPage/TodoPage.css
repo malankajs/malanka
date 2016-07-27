@@ -18,7 +18,6 @@
 }
 
     .layout_right .right {
-        display: table-cell;
         vertical-align: top;
         width: 200px;
     }
@@ -38,9 +37,11 @@
     display: table-cell;
     vertical-align: top;
     width: calc(100% - 200px);
-    padding: 5px 10px;
+    padding: 0 10px;
 }
 
 .right {
-    display: none;
+    display: table-cell;
+    width: 0;
+    transition: width 0.3s ease-out;
 }

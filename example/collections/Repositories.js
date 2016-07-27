@@ -14,7 +14,7 @@ export class Repositories extends Collection {
      */
     @Mutator('searchState.query', {
         after: function(proxy) {
-            return proxy.then().pipe(() => this.models)
+            return proxy.then().pipe(() => this)
         }
     })
     update(query) {
@@ -32,8 +32,7 @@ export class Repositories extends Collection {
                         }
                     });
                 }
-            })
-            .then(() => this.models);
+            });
     }
 
     /**

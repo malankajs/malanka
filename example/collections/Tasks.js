@@ -1,4 +1,4 @@
-import {Collection, Prototype, Mutator} from '../../es5';
+import {Collection, CollectionLens, Prototype, Mutator} from '../../es5';
 import {Task} from '../models/Task';
 
 @Prototype({
@@ -22,25 +22,41 @@ export class Tasks extends Collection {
         this.tasksState = tasksState;
     }
 
-
     /**
-     * @returns {Promise<Collection>}
-     */
-    @Mutator('tasksState.currentList')
-    forCurrentList(currentList) {
-        if (!currentList) {
-            return this;
-        }
+    //  * @returns {Promise<Collection>}
+    //  */
+    // @Mutator('tasksState.currentList')
+    // forCurrentList(currentList) {
+    //     if (!currentList) {
+    //         return this;
+    //     }
+    //
+    //     this._promise = this.fetch({
+    //         remove: true,
+    //         query: {
+    //             list: currentList._id,
+    //             _order: 'weight'
+    //         }
+    //     });
+    //
+    //     return this;
+    // }
 
-        this._promise = this.fetch({
-            remove: true,
+    @CollectionLens.lens()
+    currentListLens(model) {
+        return model.proxy('list')
+            .and(this.tasksState.proxy('currentList'))
+            .pipe(([listId, currentList]) => {
+                return currentList && listId === currentList._id;
+            });
+    }
+
+    updateDependencies() {
+        return this.fetch({
             query: {
-                list: currentList._id,
                 _order: 'weight'
             }
-        });
-
-        return this;
+        })
     }
 
 }

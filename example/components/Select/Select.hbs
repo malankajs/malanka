@@ -1,10 +1,10 @@
 <div class="title" onclick=onTitleClick>{{title}}</div>
 
-<div class="menu{{#if @state.opened}} menu_open{{/if}}">
-    {{#each collection scope="item"}}
-        <div
-            class="item{{#if (isCurrent item)}} item_current{{/if}}"
-            onclick=onClick(item)
-        >{{itemName item}}</div>
-    {{/each}}
-</div>
+{{#each collection scope="item" class="menu{{#if @state.opened}} menu_open{{/if}}"}}
+    <div
+        class="item{{#if (isCurrent item)}} item_current{{/if}}"
+        onclick=onSelectItem(item)
+    >
+        {{itemName item}}
+    </div>
+{{/each}}

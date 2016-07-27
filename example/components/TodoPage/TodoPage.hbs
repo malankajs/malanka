@@ -6,7 +6,7 @@
     <div class="content">
         <TodoForm taskName=@state.taskName oncreate=onCreate tasksState=tasksState></TodoForm>
 
-        <TodoItems collection=tasks.forCurrentList class="tasks" tasksState=tasksState></TodoItems>
+        <TodoItems collection=tasks.currentListLens class="tasks" tasksState=tasksState></TodoItems>
     </div>
 
     {{#watch @tasksState.currentTask notEmpty=true class="right"}}
