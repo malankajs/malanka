@@ -49,7 +49,7 @@ Attributes = spaces attributes:Attribute* { return attributes; }
 Attribute = spaces? attr:(ValuedAttribute / ValuelessAttribute) { return attr; }
 
 ValuedAttribute
-  = name:AttributeName "=" value:(EscapedString / CallExpression / Primitive / Expression / ExpressionPath / AttributeValue) {
+  = name:AttributeName "=" value:(EscapedString / CallExpression / Primitive / Expression / BlockExpression / ExpressionPath / AttributeValue) {
     return {
       name: name,
       value: value
@@ -137,12 +137,7 @@ ExpressionAttribute
 	/ spaces string:QuotedString { return string; }
 ExpressionAttributes = attributes:ExpressionAttribute+ { return attributes }
 
-ExpressionHashValue
-	= value:Primitive { return value }
-    / value:EscapedString { return value }
-    / path:ExpressionPath { return path }
-    / helper:InlineExpression { return helper; }
-    / string:QuotedString { return string }
+ExpressionHashValue = (Primitive / EscapedString / ExpressionPath / InlineExpression / QuotedString);
 
 ExpressionHashAttribute = spaces name:ExpressionName '=' value:ExpressionHashValue {
 	return {

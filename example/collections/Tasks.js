@@ -51,6 +51,15 @@ export class Tasks extends Collection {
             });
     }
 
+    /**
+     * @param {Task} task
+     *
+     * @returns {Number}
+     */
+    comparator(task) {
+        return task.getWeight() || 0;
+    }
+
     updateDependencies() {
         return this.fetch({
             query: {

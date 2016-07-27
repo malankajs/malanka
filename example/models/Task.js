@@ -5,7 +5,8 @@ import {Model, Prototype} from '../../es5';
     url: 'http://localhost:8080/api/tasks',
 
     defaults: {
-        done: false
+        done: false,
+        weight: 0
     }
 })
 export class Task extends Model {
@@ -22,6 +23,13 @@ export class Task extends Model {
      */
     setWeight(weight) {
         this.set('weight', weight);
+    }
+
+    /**
+     * @returns {Number}
+     */
+    getWeight() {
+        return this.get('weight');
     }
 
 }
