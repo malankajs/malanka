@@ -1,0 +1,10 @@
+/build
+/data
+/dist
+/example
+/node_modules
+/test
+/.idea
+/start.js
+/webpack.config.js
+/.npmignore
