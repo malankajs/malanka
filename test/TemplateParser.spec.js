@@ -3,7 +3,7 @@ import {expect} from 'chai';
 import {parse} from '../lib/Template/TemplateParser';
 
 describe('Template parser', function () {
-    var primitives = [12, 1.2, true, false, undefined, null],
+    var primitives = [12, 1.2, -1, -1.2, true, false, undefined, null],
         paths = ['abc', 'abc.test', '@abc.test'];
 
     it('parse strings', function () {
