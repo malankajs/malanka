@@ -117,15 +117,15 @@ StringData
 
 
 EscapedString
-	= '```' { return ['`'] }
+    = '```' { return ['`'] }
     / '\\`' { return ['`'] }
-	/ '`' text:(!'`' c:. {return c})* '`' { return [text.join('')] }
+    / '`' text:(!'`' c:. {return c})* '`' { return [text.join('')] }
 
 
 // Expressions
 ExpressionPath = name:ExpressionName {
-	return {
-    	type: 'Path',
+    return {
+        type: 'Path',
         path: name
     };
 }
@@ -133,11 +133,11 @@ ExpressionPath = name:ExpressionName {
 ExpressionName = (!'else' name:[@_a-zA-Z_0-9.]+) { return name.join('') }
 
 ExpressionAttribute
-	= __ value:Primitive { return value }
+    = __ value:Primitive { return value }
     / __ value:EscapedString { return value }
     / __ path:ExpressionPath (!'=') { return path }
     / __ helper:InlineExpression { return helper }
-	/ __ string:QuotedString { return string }
+    / __ string:QuotedString { return string }
 
 ExpressionAttributes = ExpressionAttribute+
 
@@ -149,8 +149,8 @@ ExpressionHashValue
     / QuotedString
 
 ExpressionHashAttribute = __ name:ExpressionName '=' value:ExpressionHashValue {
-	return {
-    	name: name,
+    return {
+        name: name,
         value: value
     };
 }
@@ -179,7 +179,7 @@ CloseBlockExpression = '{{/' name:ExpressionName '}}' { return name }
 InverseBlockExpression = '{{else}}' content:Content { return content }
 
 BlockExpression = start:StartBlockExpression content:Content? inverse:InverseBlockExpression? close:CloseBlockExpression {
-	if (start.path !== close) {
+    if (start.path !== close) {
         error('Unmatched block expression. Expected {{/' + start.path + '}} but {{/' + close + '}} found.');
     }
 
@@ -194,8 +194,8 @@ BlockExpression = start:StartBlockExpression content:Content? inverse:InverseBlo
 }
 
 InlineExpression = '(' path:ExpressionName params:ExpressionAttributes? hash:ExpressionHash? __? ')' {
-	return {
-    	type: 'Expression',
+    return {
+        type: 'Expression',
         path: path,
         params: params,
         hash: hash
@@ -204,14 +204,14 @@ InlineExpression = '(' path:ExpressionName params:ExpressionAttributes? hash:Exp
 
 
 CallExpressionAttribute
-	= ',' value:CallExpressionAttribute { return value }
-	/ __? value:ExpressionHashValue { return value }
+    = ',' value:CallExpressionAttribute { return value }
+    / __? value:ExpressionHashValue { return value }
 
 CallExpressionAttributes = CallExpressionAttribute*
 
 CallExpression = path:ExpressionName '(' params:CallExpressionAttributes ')' {
-	return {
-    	type: 'CallExpression',
+    return {
+        type: 'CallExpression',
         path: path,
         params: params
     };
@@ -219,7 +219,7 @@ CallExpression = path:ExpressionName '(' params:CallExpressionAttributes ')' {
 
 
 ExpressionComment
-	= '{{!--' c:(!'--}}' c:. {return c} )* '--}}' {
+    = '{{!--' c:(!'--}}' c:. {return c} )* '--}}' {
         return {
             type: 'Comment',
             content: c.join('')
@@ -235,7 +235,7 @@ ExpressionComment
 
 // Primitives
 Primitive
-	= 'false' { return {type: 'Primitive', value: false} }
+    = 'false' { return {type: 'Primitive', value: false} }
     / 'true' { return {type: 'Primitive', value: true} }
     / 'null' { return {type: 'Primitive', value: null} }
     / 'undefined' { return {type: 'Primitive', value: undefined} }
