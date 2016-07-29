@@ -1,154 +1,163 @@
 Content = (EscapedString / DocType / Comment / BalancedTag / SelfClosingTag / BlockExpression / ExpressionComment / Expression / Text)*
 
-DocType = "<!doctype " doctype:[^>]* ">" {
+// HTML Doctype
+DocType = '<!doctype ' doctype:[^>]* '>' {
     return {
         type: 'DocType',
         content: doctype.join('')
     };
 }
 
-Comment = "<!--" c:(!"-->" c:. {return c})* "-->" {
+// HTML Comment
+Comment = '<!--' c:(!'-->' c:. {return c})* '-->' {
     return {
         type: 'Comment',
         content: c.join('')
     };
 }
 
+
+// HTML Tag
 BalancedTag = startTag:StartTag content:Content endTag:EndTag {
-    if (startTag.name != endTag) {
-        throw new Error("Expected </" + startTag.name + "> but </" + endTag + "> found.");
+    if (startTag.name !== endTag) {
+        error('Expected </' + startTag.name + '> but </' + endTag + '> found.');
     }
 
     return {
-      type: 'BalancedTag',
-      name: startTag.name,
-      attributes: startTag.attributes,
-      content: content
+        type: 'BalancedTag',
+        name: startTag.name,
+        attributes: startTag.attributes,
+        content: content
     };
-  }
-
-SelfClosingTag = "<" name:TagName attributes:Attributes? spaces? "/>" {
-    return {
-      type: 'SelfClosingTag',
-      name: name,
-      attributes: attributes
-    };
-  }
-
-StartTag = "<" name:TagName attributes:Attributes? spaces? ">" {
-  return {
-    name: name,
-    attributes: attributes
-  }
 }
 
-EndTag = "</" name:TagName ">" { return name; }
-
-Attributes = spaces attributes:Attribute* { return attributes; }
-
-Attribute = spaces? attr:(ValuedAttribute / ValuelessAttribute) { return attr; }
-
-ValuedAttribute
-  = name:AttributeName "=" value:(EscapedString / CallExpression / Primitive / Expression / BlockExpression / ExpressionPath / AttributeValue) {
+SelfClosingTag = '<' name:TagName attributes:Attributes? __? '/>' {
     return {
-      name: name,
-      value: value
+        type: 'SelfClosingTag',
+        name: name,
+        attributes: attributes
     };
-  }
+}
+
+StartTag = '<' name:TagName attributes:Attributes? __? '>' {
+    return {
+        name: name,
+        attributes: attributes
+    };
+}
+
+EndTag = '</' name:TagName '>' { return name }
+
+TagName = [a-zA-Z0-9]+ { return text() }
+
+
+// Tag Attributes
+Attributes = __ attributes:Attribute* { return attributes }
+
+Attribute = __? attr:(ValuedAttribute / ValuelessAttribute) { return attr }
+
+ValuedAttribute = name:AttributeName '=' value:ValuedAttributeData {
+    return {
+        name: name,
+        value: value
+    };
+}
 
 ValuelessAttribute = name:AttributeName {
-  return {
-    name: name,
-    value: null
-  };
-}
-
-AttributeName = chars:[a-zA-Z0-9\-]+ { return chars.join(""); }
-AttributeValue = (QuotedAttributeValue / UnquotedAttributeValue)
-
-QuotedAttributeValue = value:QuotedString { return value; }
-
-UnquotedAttributeValue = value:decimalDigit* { return value.join(''); }
-
-TagName = chars:[a-zA-Z0-9]+ { return chars.join(""); }
-
-Text
-  = open:'{' chars:[^{]+ {
-  	return {
-    	type: 'Text',
-        content: open + chars.join('')
-    }
-  }
-  / chars:[^<{]+  {
     return {
-      type: 'Text',
-      content: chars.join("")
-    }
-  }
-
-
-decimalDigit = [0-9]
-
-
-QuotedString = quoteStart:('"'/"'") chars:[a-zA-Z0-9://\.-]+ quoteEnd:('"'/"'") {
-  if (quoteStart != quoteEnd) {
-    throw new Error("Unmatched quote; Expected " + quoteStart + " but " + quoteEnd + " found.");
-  }
-  return chars.join("");
+        name: name,
+        value: null
+    };
 }
 
-QuotedString
-  = "\"" content:(Expression / BlockExpression / string)* "\"" {
-  	return content;
-  }
-  string = data:stringData+ { return data.join('') }
-  stringData
+AttributeName = [a-zA-Z0-9\-]+ { return text() }
+
+ValuedAttributeData
+    = EscapedString
+    / CallExpression
+    / Primitive
+    / Expression
+    / BlockExpression
+    / ExpressionPath
+    / QuotedString
+
+
+// Text
+Text
+    = '{' [^{]+ {
+        return {
+            type: 'Text',
+            content: text()
+        };
+    }
+    / [^<{]+ {
+        return {
+            type: 'Text',
+            content: text()
+        };
+    }
+
+
+// Strings
+QuotedString = '"' content:(Expression / BlockExpression / String)* '"' { return content }
+
+String = data:StringData+ { return data.join('') }
+StringData
     = [^"\\#{]
-    / "\\0" !decimalDigit { '\0' }
-    / "\\0" &decimalDigit { throw new SyntaxError ['string data'], 'octal escape sequence', offset(), line(), column() }
-    / "\\b" { '\b' }
-    / "\\t" { '\t' }
-    / "\\n" { '\n' }
-    / "\\v" { '\v' }
-    / "\\f" { '\f' }
-    / "\\r" { '\r' }
-    / "\\" c:. { c }
-    / c:"#" !"{" { c }
+    / '\\0' !DecimalDigit { return '\0' }
+    / '\\0' &DecimalDigit { error('Octal escape sequence is not supported') }
+    / '\\b' { return '\b' }
+    / '\\t' { return '\t' }
+    / '\\n' { return '\n' }
+    / '\\v' { return '\v' }
+    / '\\f' { return '\f' }
+    / '\\r' { return '\r' }
+    / '\\' c:. { return c }
+    / '#' !'{' { return '#' }
+
 
 EscapedString
-	= '```' { return ['`'] }
+    = '```' { return ['`'] }
     / '\\`' { return ['`'] }
-	/'`' text:(!'`' c:. {return c})* '`' { return [text.join('')] }
+    / '`' text:(!'`' c:. {return c})* '`' { return [text.join('')] }
 
-ExpressionPath = path:[@_a-zA-Z.0-9]+ {
-	return {
-    	type: 'Path',
-        path: path.join('')
+
+// Expressions
+ExpressionPath = name:ExpressionName {
+    return {
+        type: 'Path',
+        path: name
     };
 }
 
 ExpressionName = (!'else' name:[@_a-zA-Z_0-9.]+) { return name.join('') }
 
 ExpressionAttribute
-	= spaces value:Primitive { return value }
-    / spaces value:EscapedString { return value }
-    / spaces path:ExpressionPath (!'=') { return path; }
-    / spaces helper:InlineExpression { return helper; }
-	/ spaces string:QuotedString { return string; }
-ExpressionAttributes = attributes:ExpressionAttribute+ { return attributes }
+    = __ value:Primitive { return value }
+    / __ value:EscapedString { return value }
+    / __ path:ExpressionPath (!'=') { return path }
+    / __ helper:InlineExpression { return helper }
+    / __ string:QuotedString { return string }
 
-ExpressionHashValue = (Primitive / EscapedString / ExpressionPath / InlineExpression / QuotedString);
+ExpressionAttributes = ExpressionAttribute+
 
-ExpressionHashAttribute = spaces name:ExpressionName '=' value:ExpressionHashValue {
-	return {
-    	name: name,
+ExpressionHashValue
+    = Primitive
+    / EscapedString
+    / ExpressionPath
+    / InlineExpression
+    / QuotedString
+
+ExpressionHashAttribute = __ name:ExpressionName '=' value:ExpressionHashValue {
+    return {
+        name: name,
         value: value
-    }
+    };
 }
 
-ExpressionHash = attrs:ExpressionHashAttribute+ { return attrs; }
+ExpressionHash = ExpressionHashAttribute+
 
-Expression = open:'{{' path:ExpressionName params:ExpressionAttributes? hash:ExpressionHash? spaces? close:'}}' {
+Expression = '{{' path:ExpressionName params:ExpressionAttributes? hash:ExpressionHash? __? '}}' {
     return {
         type: 'Expression',
         path: path,
@@ -157,21 +166,21 @@ Expression = open:'{{' path:ExpressionName params:ExpressionAttributes? hash:Exp
     };
 }
 
-StartBlockExpression = open:'{{#' path:ExpressionName attributes:ExpressionAttributes? hash:ExpressionHash? spaces? close:'}}' {
+StartBlockExpression = '{{#' path:ExpressionName attributes:ExpressionAttributes? hash:ExpressionHash? __? '}}' {
     return {
         path: path,
         attributes: attributes,
         hash: hash
-    }
+    };
 }
 
-CloseBlockExpression = open:'{{/' name:ExpressionName close:'}}' { return name; }
+CloseBlockExpression = '{{/' name:ExpressionName '}}' { return name }
 
-InverseBlockExpression = '{{else}}' content:Content { return content; }
+InverseBlockExpression = '{{else}}' content:Content { return content }
 
 BlockExpression = start:StartBlockExpression content:Content? inverse:InverseBlockExpression? close:CloseBlockExpression {
-	if (start.path !== close) {
-        throw new Error("Unmatched block expression. Expected " + start.name + " but " + close.name + " found.");
+    if (start.path !== close) {
+        error('Unmatched block expression. Expected {{/' + start.path + '}} but {{/' + close + '}} found.');
     }
 
     return {
@@ -181,33 +190,36 @@ BlockExpression = start:StartBlockExpression content:Content? inverse:InverseBlo
         hash: start.hash,
         content: content,
         inverse: inverse
-    }
+    };
 }
 
-InlineExpression = '(' path:ExpressionName params:ExpressionAttributes? hash:ExpressionHash? spaces? ')' {
-	return {
-    	type: 'Expression',
+InlineExpression = '(' path:ExpressionName params:ExpressionAttributes? hash:ExpressionHash? __? ')' {
+    return {
+        type: 'Expression',
         path: path,
         params: params,
         hash: hash
-    }
+    };
 }
-CallExpressionAtribute
-	= ',' value:CallExpressionAtribute {return value}
-	/ spaces? value:ExpressionHashValue {return value}
 
-CallExpressionAtributes = CallExpressionAtribute*
 
-CallExpression = path:ExpressionName '(' params:CallExpressionAtributes ')' {
-	return {
-    	type: 'CallExpression',
+CallExpressionAttribute
+    = ',' value:CallExpressionAttribute { return value }
+    / __? value:ExpressionHashValue { return value }
+
+CallExpressionAttributes = CallExpressionAttribute*
+
+CallExpression = path:ExpressionName '(' params:CallExpressionAttributes ')' {
+    return {
+        type: 'CallExpression',
         path: path,
         params: params
-    }
+    };
 }
 
+
 ExpressionComment
-	= '{{!--' c:(!'--}}' c:. {return c} )* '--}}' {
+    = '{{!--' c:(!'--}}' c:. {return c} )* '--}}' {
         return {
             type: 'Comment',
             content: c.join('')
@@ -220,16 +232,23 @@ ExpressionComment
         };
     }
 
+
+// Primitives
 Primitive
-	= 'false' { return {type: 'Primitive', value: false} }
+    = 'false' { return {type: 'Primitive', value: false} }
     / 'true' { return {type: 'Primitive', value: true} }
     / 'null' { return {type: 'Primitive', value: null} }
     / 'undefined' { return {type: 'Primitive', value: undefined} }
-    / nums:([0-9]+) d:(d:'.' n:[0-9]+ { return d + n.join('') }) {
-    	return {type: 'Primitive', value: Number(nums.join('') + d)}
-    }
-    / nums:([0-9]+) {
-    	return {type: 'Primitive', value: Number(nums.join(''))}
-    }
+    / SignedInteger '.' DecimalDigit+ { return {type: 'Primitive', value: Number(text())} }
+    / SignedInteger { return {type: 'Primitive', value: Number(text())} }
 
+
+SignedInteger = [+-]? DecimalDigit+
+
+DecimalDigit = [0-9]
+
+
+// Consts
 spaces = [ \t\r\n]+
+
+__ = spaces
