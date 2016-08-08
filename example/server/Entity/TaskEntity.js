@@ -11,4 +11,8 @@ export class TaskEntity extends Document {
         this.weight = Number;
     }
 
+    static collectionName() {
+        return 'taskentitys';
+    }
+
 }

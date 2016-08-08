@@ -30,7 +30,7 @@ export function serverRender(req, res, next) {
         })
         .then(body => {
             let diData = JSON.stringify(di.serialize()).replace(/</gi, '&lt;');
-            return `<head><link rel="stylesheet" href="/assets/styles.css"></head><body>${body}<script>var diData=${diData};</script><script type="text/javascript" src="/assets/bundle.js"></script></body>`;
+            return `<head><title>Malanka</title><link rel="stylesheet" href="/assets/styles.css"></head><body>${body}<script>var diData=${diData};</script><script type="text/javascript" src="/assets/bundle.js"></script></body>`;
         })
         .then(content => {
             res.send(content);

@@ -43,7 +43,13 @@ export class Router extends AbstractRouter {
             });
         });
 
-        router.use(() => session.close());
+        router.use(
+            () => session.close(),
+            (error) => {
+                session.close();
+                throw error;
+            }
+        );
 
         return router;
     }

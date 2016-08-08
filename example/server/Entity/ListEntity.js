@@ -9,4 +9,8 @@ export class ListEntity extends Document {
         this.weight = Number;
     }
 
+    static collectionName() {
+        return 'listentitys';
+    }
+
 }
