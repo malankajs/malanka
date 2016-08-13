@@ -31,14 +31,4 @@ export class SearchState extends Model {
         };
     }
 
-    /**
-     * @param {{}} data
-     * @param {{}} dependencies
-     * 
-     * @returns {Model}
-     */
-    static restore(data, dependencies) {
-        return this.dataFactory(data, dependencies);
-    }
-
 }
