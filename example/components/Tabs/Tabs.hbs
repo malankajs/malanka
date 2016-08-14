@@ -1,7 +1,0 @@
-{{#each (tabs "") scope="tab" className=styles.head}}
-    <div class="tab{{#if (isActive tab.id)}} tab_active{{/if}}" onclick=onSelect(tab.id)>
-        {{tab.title}}
-    </div>
-{{/each}}
-
-<RegionComponent component=@currentTab class="content content_active" />

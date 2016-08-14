@@ -1,7 +1,0 @@
-.root {
-    margin: 14px 0;
-}
-
-.input {
-    composes: root from '../Input/Input.css';
-}
