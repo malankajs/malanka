@@ -7,7 +7,8 @@
     "test": "mocha --compilers js:babel-register",
     "peg": "pegjs lib/Template/gramma.peg lib/Template/TemplateParser.js",
     "es5": "babel -w -s inline -d es5 lib",
-    "prepublish": "npm run peg && babel -s inline -d es5 lib"
+    "build": "npm run peg && babel -s inline -d es5 lib",
+    "prepublish": "npm run build"
   },
   "author": "",
   "license": "ISC",
