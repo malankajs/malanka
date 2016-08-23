@@ -70,12 +70,12 @@ ValuelessAttribute = name:AttributeName {
     };
 }
 
-AttributeName = [a-zA-Z0-9\-]+ { return text() }
+AttributeName = '#'? [a-zA-Z0-9\-]+ { return text() }
 
 ValuedAttributeData
     = EscapedString
-    / CallExpression
     / Primitive
+    / CallExpression
     / Expression
     / BlockExpression
     / ExpressionPath
@@ -130,7 +130,7 @@ ExpressionPath = name:ExpressionName {
     };
 }
 
-ExpressionName = (!'else' name:[@_a-zA-Z_0-9.]+) { return name.join('') }
+ExpressionName = (!'else' [@_a-zA-Z_0-9.]+) { return text() }
 
 ExpressionAttribute
     = __ value:Primitive { return value }

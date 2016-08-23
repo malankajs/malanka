@@ -34,8 +34,17 @@ describe('TemplateNodeComponent', function () {
 
         beforeEach(function(){
             compiler = new TemplateCompiler({
+                components: {
+                    Test: './Test',
+                    Test2: './Test2',
+                    AsyncComponent: './AsyncComponent'
+                },
                 optimize: {
                     plugins: []
+                },
+                define: {
+                    is_server: true,
+                    is_client: false
                 }
             });
         });
@@ -52,6 +61,54 @@ describe('TemplateNodeComponent', function () {
             expect(result).to.equal('module.exports = function(context){return new Component({"content":function(scope){return scope.test=new Component({})}})}');
         });
 
-    });
+        describe('pragma', function() {
+            describe('bundle', function() {
+                it('compile bundle components', function() {
+                    let result = compiler.compileString('<Test #bundle=true></Test>').split('\n').pop();
 
+                    expect(result).to.equal('module.exports = function(context){return new AsyncComponent({"promise":require("promise?global!./Test")().then(function(bundle){var Test=bundle.Test;return new Test({})})})}');
+                });
+
+                it('compile nested bundle components', function() {
+                    let result = compiler.compileString('<Test #bundle=true><Test #bundle=true></Test></Test>').split('\n').pop();
+
+                    expect(result).to.equal('module.exports = function(context){return new AsyncComponent({"promise":require("promise?global!./Test")().then(function(bundle){var Test=bundle.Test;return new Test({"content":new Test({})})})})}');
+                });
+
+                it('compile bundle component with nested', function() {
+                    let result = compiler.compileString('<Test #bundle=true><Test2></Test2></Test>').split('\n').pop();
+
+                    expect(result).to.equal('module.exports = function(context){return new AsyncComponent({"promise":require("promise?global!./Test")().then(function(bundle){var Test=bundle.Test;var Test2 = require("./Test2").Test2;return new Test({"content":new Test2({})})})})}');
+                });
+            });
+
+            describe('async', function() {
+                it('compile async components', function() {
+                    let result = compiler.compileString('<Test #async="promise"></Test>').split('\n').pop();
+
+                    expect(result).to.equal('module.exports = function(context){return new AsyncComponent({"promise":function(v0){return Promise.resolve(v0=new Test({})).then(function(){return v0.promise()}).then(function(){return v0})}()})}');
+                });
+
+                it('compile async bundle components', function() {
+                    let result = compiler.compileString('<Test #bundle=true #async="promise"></Test>').split('\n').pop();
+
+                    expect(result).to.equal('module.exports = function(context){return new AsyncComponent({"promise":require("promise?global!./Test")().then(function(bundle){var Test=bundle.Test;return function(v0){return Promise.resolve(v0=new Test({})).then(function(){return v0.promise()}).then(function(){return v0})}()})})}');
+                });
+            });
+
+            describe('match', function() {
+                it('compile async components with true match', function() {
+                    let result = compiler.compileString('<Test #async="promise" #match="is_server"></Test>').split('\n').pop();
+
+                    expect(result).to.equal('module.exports = function(context){return new AsyncComponent({"promise":function(v0){return Promise.resolve(v0=new Test({})).then(function(){return v0.promise()}).then(function(){return v0})}()})}');
+                });
+
+                it('compile async components with false match', function() {
+                    let result = compiler.compileString('<Test #async="promise" #match="is_client"></Test>').split('\n').pop();
+
+                    expect(result).to.equal('module.exports = function(context){return new AsyncComponent()}');
+                });
+            });
+        });
+    });
 });
