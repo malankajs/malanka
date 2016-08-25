@@ -17,9 +17,27 @@ describe('Events', function() {
         expect([count, anotherCount]).to.eql([0, 0]);
     });
 
+    it('supports multiple `once(cb)`', function() {
+        count = 1; anotherCount = 1;
+        channel.once(cb).once(anotherCb).emit();
+        expect([count, anotherCount]).to.eql([0, 0]);
+    });
+
+    it('supports multiple `once(cb)` with the same cb', function() {
+        count = 2;
+        channel.once(cb).once(cb).emit();
+        expect(count).to.eql(0);
+    });
+
     it('supports `listenToOnce(obj, cb)`', function() {
         count = 1; anotherCount = 2;
         channel.listenTo(channel, anotherCb).listenToOnce(channel, cb).emit().emit();
+        expect([count, anotherCount]).to.eql([0, 0]);
+    });
+
+    it('supports multiple `listenToOnce(obj, cb)`', function() {
+        count = 1; anotherCount = 1;
+        channel.listenToOnce(channel, cb).listenToOnce(channel, anotherCb).emit();
         expect([count, anotherCount]).to.eql([0, 0]);
     });
 
