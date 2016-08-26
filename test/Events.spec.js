@@ -29,6 +29,17 @@ describe('Events', function() {
         expect(count).to.eql(0);
     });
 
+    it('supports recursive `emit` on the same channel with emit-time `off` calls', function() {
+        count = 1; anotherCount = 2;
+        let cb = () => {
+            --count;
+            channel.off(cb);
+            channel.emit();
+        };
+        channel.on(cb).on(anotherCb).emit();
+        expect([count, anotherCount]).to.eql([0, 0]);
+    });
+
     it('supports `listenToOnce(obj, cb)`', function() {
         count = 1; anotherCount = 2;
         channel.listenTo(channel, anotherCb).listenToOnce(channel, cb).emit().emit();
