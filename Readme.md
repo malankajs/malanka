@@ -19,6 +19,32 @@ like to [backbone](https://github.com/jashkenas/backbone), but with data streams
 Then main goal of framework is to create universal components, which must render on server and client
 and provide easy way to restore their state to continue work.
 
+## Events locks
+
+Malanka has ability to merge same events, like debounce, but without timers. It is allowing to 
+reduce calculations and DOM modifications. Events in this case will be triggered not in depth,
+but in width. This means, that deep value proxies pipes will be modified with delay, but will be synced anyway.
+
+You can toggle this behavior with `Planner` static methods:
+
+```js
+Planner.enableLock(); // Turn on
+Planner.disableLock(); // Turn off
+```
+
+**Warning!** Do not use it on server, because it will cause undefined behaviour.
+
+To prevent parasitic computing you can also tell `Planner` to wait until all operations are done:
+
+```js
+Planner.lock(() => {
+    model1.set('a', 1);
+    model2.set('b', 2);
+});
+
+// Here all events will be already triggered 
+```
+
 ## Helpers
 
 ### Short if helper
