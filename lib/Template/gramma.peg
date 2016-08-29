@@ -157,7 +157,9 @@ ExpressionHashAttribute = __ name:ExpressionName '=' value:ExpressionHashValue {
 
 ExpressionHash = ExpressionHashAttribute+
 
-Expression = '{{' path:ExpressionName params:ExpressionAttributes? hash:ExpressionHash? __? '}}' {
+Expression = '{{' body:(ShortIfExpressionBody / ExpressionBody) '}}' { return body }
+
+ExpressionBody = path:ExpressionName params:ExpressionAttributes? hash:ExpressionHash? __? {
     return {
         type: 'Expression',
         path: path,
@@ -165,6 +167,34 @@ Expression = '{{' path:ExpressionName params:ExpressionAttributes? hash:Expressi
         hash: hash
     };
 }
+
+ShortIfExpression = '{{' body:ShortIfExpressionBody '}}' { return body }
+ShortIfExpressionBody
+	= path:ExpressionPath __? '?' content:ExpressionAttribute __? inverse:(':' inverse:ExpressionAttribute __? {return inverse})? {
+        return {
+            type: 'BlockExpression',
+            path: 'if',
+            params: [path],
+            hash: null,
+            content: [content],
+            inverse: inverse ? [inverse] : null
+        }
+    }
+    / path:ExpressionPath __? '?:' inverse:ExpressionAttribute {
+    	return {
+            type: 'BlockExpression',
+            path: 'if',
+            params: [path],
+            hash: null,
+            content: [{
+            	type: 'Expression',
+                path: path.path,
+                params: null,
+                hash: null
+            }],
+            inverse: [inverse]
+        }
+    }
 
 StartBlockExpression = '{{#' path:ExpressionName attributes:ExpressionAttributes? hash:ExpressionHash? __? '}}' {
     return {
@@ -193,15 +223,7 @@ BlockExpression = start:StartBlockExpression content:Content? inverse:InverseBlo
     };
 }
 
-InlineExpression = '(' path:ExpressionName params:ExpressionAttributes? hash:ExpressionHash? __? ')' {
-    return {
-        type: 'Expression',
-        path: path,
-        params: params,
-        hash: hash
-    };
-}
-
+InlineExpression = '(' body:(ShortIfExpressionBody / ExpressionBody) ')' { return body }
 
 CallExpressionAttribute
     = ',' value:CallExpressionAttribute { return value }
