@@ -1,7 +1,6 @@
 import {expect} from 'chai';
 
 import {TemplateNodeBlockHelper} from '../lib/Template/nodes/TemplateNodeBlockHelper';
-import {TemplateNodePath} from '../lib/Template/nodes/TemplateNodePath';
 import {TemplateEnvironment} from '../lib/Template/TemplateEnvironment';
 import {TemplateCompiler} from "../lib/Template/TemplateCompiler";
 
@@ -36,6 +35,36 @@ describe('TemplateNodeBlockHelper', function () {
         let result = compiler.compileString('{{#test scope="v0"}}{{v0}}{{/test}}').split('\n').pop();
 
         expect(result).to.equal('module.exports = function(context){return context.test.call(context,{"hash":{},"content":function(v0){return v0}})}');
+    });
+
+    it('compile short if', function () {
+        let result = compiler.compileString('{{test ? 1 : 2}}').split('\n').pop();
+
+        expect(result).to.equal('module.exports = function(context){return context.if.call(context,context.test,{"hash":{},"content":function(){return 1},"inverse":function(){return 2}})}');
+    });
+
+    it('compile short if without then', function () {
+        let result = compiler.compileString('{{test ?: 2}}').split('\n').pop();
+
+        expect(result).to.equal('module.exports = function(context){return context.if.call(context,context.test,{"hash":{},"content":function(){return context.test},"inverse":function(){return 2}})}');
+    });
+
+    it('compile short if without else', function () {
+        let result = compiler.compileString('{{test ? 1}}').split('\n').pop();
+
+        expect(result).to.equal('module.exports = function(context){return context.if.call(context,context.test,{"hash":{},"content":function(){return 1}})}');
+    });
+
+    it('compile short if inlined', function () {
+        let result = compiler.compileString('{{test (param ? 1 : 2)}}').split('\n').pop();
+
+        expect(result).to.equal('module.exports = function(context){return context.test.call(context,context.if.call(context,context.param,{"hash":{},"content":function(){return 1},"inverse":function(){return 2}}),{"hash":{}})}');
+    });
+
+    it('compile short if without then and watch variable', function () {
+        let result = compiler.compileString('{{@test ?: 2}}').split('\n').pop();
+
+        expect(result).to.equal('module.exports = function(context){return context.if.call(context,context.proxy("test"),{"hash":{},"content":function(){return context.proxy("test")},"inverse":function(){return 2}})}');
     });
 
 });

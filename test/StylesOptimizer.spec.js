@@ -62,4 +62,10 @@ describe('StylesOptimizer', function () {
         expect(result).to.equal('module.exports = function(context){return context.test.call(context,{"hash":{"class":context.styles.abc}})}');
     });
 
+    it('transform class in short if', function() {
+        let result = compiler.compileString('<div class="test1 {{test ? "test2" : "test3"}}"></div>').split('\n').pop();
+
+        expect(result).to.equal('module.exports = function(context){return new Component({"attributes":{"class":__join(__mergeStrings([context.styles.test1," ",context.if.call(context,context.test,{"hash":{},"isString":true,"content":function(){return context.styles.test2},"inverse":function(){return context.styles.test3}})], context))}})}');
+    })
+
 });

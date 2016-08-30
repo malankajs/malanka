@@ -19,6 +19,42 @@ like to [backbone](https://github.com/jashkenas/backbone), but with data streams
 Then main goal of framework is to create universal components, which must render on server and client
 and provide easy way to restore their state to continue work.
 
+## Helpers
+
+### Short if helper
+
+In some cases you can use short if statement instead of full block helper for 
+more convenient record:
+
+```handlebars
+<div class="{{isVisible ? "visible" : "hidden" }}"></div>
+```
+
+it is equivalent to:
+
+```js
+<div class="{{#if isVisible}}visible{{else}}hidden{{/if}}"></div>
+```
+
+Else block is not necessary:
+
+```handlebars
+<div class="{{isVisible ? "visible"}}"></div>
+```
+
+In case you want check variable and pass it or pass default value, you can write:
+
+```handlebars
+<div class="{{myClass ?: "defaultClass"}}"></div>
+```
+
+it is equivalent to:
+
+```js
+<div class="{{#if myClass}}{{myClass}}{{else}}defaultClass{{/if}}"></div>
+```
+
+
 ## Template render pragma
 
 Malanka supports special pragma for rendering components. It is use only during compilation and 
