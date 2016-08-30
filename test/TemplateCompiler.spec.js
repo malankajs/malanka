@@ -211,4 +211,11 @@ describe('Template compiler', function () {
 
         expect(result).to.equal('<div><span> test </span></div>');
     });
+
+    it('Compile void elements', function () {
+        var component = new Component();
+        var result = render('<br><input>', component);
+
+        expect(result).to.equal('<br><input>');
+    });
 });
