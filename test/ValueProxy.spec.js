@@ -3,6 +3,7 @@ import {expect} from 'chai';
 
 import {ValueProxy} from '../lib/Data/ValueProxy';
 import {Model} from '../lib/Data/Model';
+import {Planner} from '../lib/Data/Planner';
 
 describe('ValueProxy', function () {
     let model;
@@ -149,6 +150,56 @@ describe('ValueProxy', function () {
 
         return thenProxy._promise.then(() => {
             expect(calledValue).to.equal(123);
+        });
+    });
+
+    describe('generations', function() {
+        before(() => Planner.enableLock());
+        after(() => Planner.disableLock());
+
+        it('support pipe generations', () => {
+            let proxy = new ValueProxy(),
+                order = [];
+
+            let proxy1 = proxy.pipe((value) => {
+                order.push([1, value]);
+                return value + 1;
+            });
+
+            proxy1.on((value) => {
+                order.push([2, value]);
+            });
+
+            Planner.lock(() => {
+                proxy.emit(1);
+                proxy.emit(2);
+                proxy.emit(3);
+            });
+
+            expect(order).to.eql([
+                [1, undefined], // initialization
+                [1, 3],
+                [2, 4]
+            ]);
+        });
+
+        it('support all generations', () => {
+            let proxy1 = new ValueProxy(),
+                proxy2 = new ValueProxy(),
+                order = [];
+
+            ValueProxy.all([proxy1, proxy2]).on((value) => {
+                order.push(value);
+            });
+
+            Planner.lock(() => {
+                proxy1.emit(1);
+                proxy2.emit(2);
+            });
+
+            expect(order).to.eql([
+                [1, 2]
+            ]);
         });
     });
 
