@@ -47,6 +47,60 @@ Planner.lock(() => {
 
 ## Helpers
 
+### each
+
+Each helper allows to render collection, array or value proxy:
+
+```js
+let data = {
+    array: [1, 2, 3],
+    collection: new Collection([
+        {id: 1},
+        {id: 2},
+        {id: 3}
+    ])
+}
+```
+
+and template:
+
+```handlebars
+{{!-- Output: 123 --}}
+{{#each data.array scope="value"}}
+    {{value}}
+{{/each}}
+
+{{!-- 
+Output:
+
+<ul>
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+</ul>
+--}}
+{{#each data.array scope="value" tagName="ul"}}
+    <li>{{value}}<li>
+{{/each}}
+
+{{!-- 
+Output:
+
+<!-- in fact CSS modules numbers class -->
+<div class="numbers"> 
+    <div>Value: <span>1</span></div>
+    <div>Value: <span>2</span></div>
+    <div>Value: <span>3</span></div>
+</ul>
+--}}
+{{#each data.array scope="value" class="numbers"}}
+    Value: <span>{{value}}</span>
+{{/each}}
+```
+
+When `Collection` or `ValueProxy` passed malanka will be watching for
+updates
+
 ### Short if helper
 
 In some cases you can use short if statement instead of full block helper for 
