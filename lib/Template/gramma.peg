@@ -1,78 +1,82 @@
-Content = (EscapedString / DocType / Comment / BalancedTag / SelfClosingTag / BlockExpression / ExpressionComment / Expression / Text)*
+Content = (EscapedString / ComponentComment / Component / BlockExpression / ExpressionComment / Expression / Text)*
 
-// HTML Doctype
-DocType = '<!doctype ' doctype:[^>]* '>' {
-    return {
-        type: 'DocType',
-        content: doctype.join('')
-    };
-}
+// Components
 
-// HTML Comment
-Comment = '<!--' c:(!'-->' c:. {return c})* '-->' {
+Component
+	= BalancedComponent
+	/ ClosingComponent
+	/ VoidComponent
+
+BalancedComponent
+    = start:StartComponent content:Content end:EndComponent
+    & {
+        return start.name === end;
+    }
+    {
+        start.content = content;
+        return start;
+    }
+
+ClosingComponent
+    = '<' name:ComponentName attributes:ComponentAttributes? __? '/>' {
+        return {
+            type: 'Component',
+            name: name,
+            attributes: attributes
+        };
+    }
+
+VoidComponent
+    = StartComponent
+
+StartComponent
+    = '<' name:ComponentName attributes:ComponentAttributes? __? '>' {
+        return {
+            type: 'Component',
+            name: name,
+            attributes: attributes
+        };
+    }
+
+EndComponent
+    = '</' name:ComponentName '>' { return name }
+
+ComponentName
+    = [a-zA-Z0-9]+ { return text() }
+
+ComponentComment = '<!--' c:(!'-->' c:. {return c})* '-->' {
     return {
         type: 'Comment',
         content: c.join('')
     };
 }
 
+ComponentAttributes
+    = __ attributes:ComponentAttribute* { return attributes }
 
-// HTML Tag
-BalancedTag = startTag:StartTag content:Content endTag:EndTag {
-    if (startTag.name !== endTag) {
-        error('Expected </' + startTag.name + '> but </' + endTag + '> found.');
+ComponentAttribute
+    = __? attr:(ComponentValuedAttribute / ComponentValuelessAttribute) { return attr }
+
+ComponentValuedAttribute
+    = name:ComponentAttributeName '=' value:ComponentValuedAttributeData {
+        return {
+            name: name,
+            value: value
+        };
     }
 
-    return {
-        type: 'BalancedTag',
-        name: startTag.name,
-        attributes: startTag.attributes,
-        content: content
-    };
-}
+ComponentValuelessAttribute
+    = name:ComponentAttributeName {
+        return {
+            name: name,
+            value: null
+        };
+    }
 
-SelfClosingTag = '<' name:TagName attributes:Attributes? __? '/>' {
-    return {
-        type: 'SelfClosingTag',
-        name: name,
-        attributes: attributes
-    };
-}
+ComponentAttributeName
+    = '#'? [a-zA-Z0-9\-]+ { return text() }
 
-StartTag = '<' name:TagName attributes:Attributes? __? '>' {
-    return {
-        name: name,
-        attributes: attributes
-    };
-}
-
-EndTag = '</' name:TagName '>' { return name }
-
-TagName = [a-zA-Z0-9]+ { return text() }
-
-
-// Tag Attributes
-Attributes = __ attributes:Attribute* { return attributes }
-
-Attribute = __? attr:(ValuedAttribute / ValuelessAttribute) { return attr }
-
-ValuedAttribute = name:AttributeName '=' value:ValuedAttributeData {
-    return {
-        name: name,
-        value: value
-    };
-}
-
-ValuelessAttribute = name:AttributeName {
-    return {
-        name: name,
-        value: null
-    };
-}
-
-AttributeName = '#'? [a-zA-Z0-9\-]+ { return text() }
-
-ValuedAttributeData
+ComponentValuedAttributeData
     = EscapedString
     / Primitive
     / CallExpression
@@ -99,9 +103,12 @@ Text
 
 
 // Strings
-QuotedString = '"' content:(Expression / BlockExpression / String)* '"' { return content }
+QuotedString
+    = '"' content:(Expression / BlockExpression / String)* '"' { return content }
 
-String = data:StringData+ { return data.join('') }
+String
+    = data:StringData+ { return data.join('') }
+
 StringData
     = [^"\\#{]
     / '\\0' !DecimalDigit { return '\0' }
@@ -123,14 +130,16 @@ EscapedString
 
 
 // Expressions
-ExpressionPath = name:ExpressionName {
-    return {
-        type: 'Path',
-        path: name
-    };
-}
+ExpressionPath
+    = name:ExpressionName {
+        return {
+            type: 'Path',
+            path: name
+        };
+    }
 
-ExpressionName = (!'else' [@_a-zA-Z_0-9.]+) { return text() }
+ExpressionName
+    = (!'else' [@_a-zA-Z_0-9.]+) { return text() }
 
 ExpressionAttribute
     = __ value:Primitive { return value }
@@ -148,27 +157,33 @@ ExpressionHashValue
     / InlineExpression
     / QuotedString
 
-ExpressionHashAttribute = __ name:ExpressionName '=' value:ExpressionHashValue {
-    return {
-        name: name,
-        value: value
-    };
-}
+ExpressionHashAttribute
+    = __ name:ExpressionName '=' value:ExpressionHashValue {
+        return {
+            name: name,
+            value: value
+        };
+    }
 
-ExpressionHash = ExpressionHashAttribute+
+ExpressionHash
+    = ExpressionHashAttribute+
 
-Expression = '{{' body:(ShortIfExpressionBody / ExpressionBody) '}}' { return body }
+Expression
+    = '{{' body:(ShortIfExpressionBody / ExpressionBody) '}}' { return body }
 
-ExpressionBody = path:ExpressionName params:ExpressionAttributes? hash:ExpressionHash? __? {
-    return {
-        type: 'Expression',
-        path: path,
-        params: params,
-        hash: hash
-    };
-}
+ExpressionBody
+    = path:ExpressionName params:ExpressionAttributes? hash:ExpressionHash? __? {
+        return {
+            type: 'Expression',
+            path: path,
+            params: params,
+            hash: hash
+        };
+    }
 
-ShortIfExpression = '{{' body:ShortIfExpressionBody '}}' { return body }
+ShortIfExpression
+    = '{{' body:ShortIfExpressionBody '}}' { return body }
+
 ShortIfExpressionBody
 	= path:ExpressionPath __? '?' content:ExpressionAttribute __? inverse:(':' inverse:ExpressionAttribute __? {return inverse})? {
         return {
@@ -196,48 +211,55 @@ ShortIfExpressionBody
         }
     }
 
-StartBlockExpression = '{{#' path:ExpressionName attributes:ExpressionAttributes? hash:ExpressionHash? __? '}}' {
-    return {
-        path: path,
-        attributes: attributes,
-        hash: hash
-    };
-}
-
-CloseBlockExpression = '{{/' name:ExpressionName '}}' { return name }
-
-InverseBlockExpression = '{{else}}' content:Content { return content }
-
-BlockExpression = start:StartBlockExpression content:Content? inverse:InverseBlockExpression? close:CloseBlockExpression {
-    if (start.path !== close) {
-        error('Unmatched block expression. Expected {{/' + start.path + '}} but {{/' + close + '}} found.');
+StartBlockExpression
+    = '{{#' path:ExpressionName attributes:ExpressionAttributes? hash:ExpressionHash? __? '}}' {
+        return {
+            path: path,
+            attributes: attributes,
+            hash: hash
+        };
     }
 
-    return {
-        type: 'BlockExpression',
-        path: start.path,
-        params: start.attributes,
-        hash: start.hash,
-        content: content,
-        inverse: inverse
-    };
-}
+CloseBlockExpression
+    = '{{/' name:ExpressionName '}}' { return name }
 
-InlineExpression = '(' body:(ShortIfExpressionBody / ExpressionBody) ')' { return body }
+InverseBlockExpression
+    = '{{else}}' content:Content { return content }
+
+BlockExpression
+    = start:StartBlockExpression content:Content? inverse:InverseBlockExpression? close:CloseBlockExpression {
+        if (start.path !== close) {
+            error('Unmatched block expression. Expected {{/' + start.path + '}} but {{/' + close + '}} found.');
+        }
+
+        return {
+            type: 'BlockExpression',
+            path: start.path,
+            params: start.attributes,
+            hash: start.hash,
+            content: content,
+            inverse: inverse
+        };
+    }
+
+InlineExpression
+    = '(' body:(ShortIfExpressionBody / ExpressionBody) ')' { return body }
 
 CallExpressionAttribute
     = ',' value:CallExpressionAttribute { return value }
     / __? value:ExpressionHashValue { return value }
 
-CallExpressionAttributes = CallExpressionAttribute*
+CallExpressionAttributes
+    = CallExpressionAttribute*
 
-CallExpression = path:ExpressionName '(' params:CallExpressionAttributes ')' {
-    return {
-        type: 'CallExpression',
-        path: path,
-        params: params
-    };
-}
+CallExpression
+    = path:ExpressionName '(' params:CallExpressionAttributes ')' {
+        return {
+            type: 'CallExpression',
+            path: path,
+            params: params
+        };
+    }
 
 
 ExpressionComment
@@ -265,12 +287,15 @@ Primitive
     / SignedInteger { return {type: 'Primitive', value: Number(text())} }
 
 
-SignedInteger = [+-]? DecimalDigit+
+SignedInteger
+    = [+-]? DecimalDigit+
 
-DecimalDigit = [0-9]
-
+DecimalDigit
+    = [0-9]
 
 // Consts
-spaces = [ \t\r\n]+
+spaces
+    = [ \t\r\n]+
 
-__ = spaces
+__
+    = spaces

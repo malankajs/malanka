@@ -309,7 +309,7 @@ describe('Template parser', function () {
         it('tag without params', function () {
             expect(parse('<div></div>')).to.eql([
                 {
-                    type: 'BalancedTag',
+                    type: 'Component',
                     attributes: null,
                     content: [],
                     name: 'div'
@@ -319,7 +319,7 @@ describe('Template parser', function () {
         it('self closing tag without params', function () {
             expect(parse('<div/>')).to.eql([
                 {
-                    type: 'SelfClosingTag',
+                    type: 'Component',
                     attributes: null,
                     name: 'div'
                 }
@@ -328,7 +328,7 @@ describe('Template parser', function () {
         it('tag with attributes', function () {
             expect(parse('<div id="test"></div>')).to.eql([
                 {
-                    type: 'BalancedTag',
+                    type: 'Component',
                     attributes: [
                         {
                             name: 'id',
@@ -343,7 +343,7 @@ describe('Template parser', function () {
         it('self closing tag without params', function () {
             expect(parse('<div id="test"/>')).to.eql([
                 {
-                    type: 'SelfClosingTag',
+                    type: 'Component',
                     attributes: [
                         {
                             name: 'id',
@@ -357,7 +357,7 @@ describe('Template parser', function () {
         it('tag with attribute variable', function () {
             expect(parse('<div id=test></div>')).to.eql([
                 {
-                    type: 'BalancedTag',
+                    type: 'Component',
                     attributes: [
                         {
                             name: 'id',
@@ -375,7 +375,7 @@ describe('Template parser', function () {
         it('tag with attribute variable', function () {
             expect(parse('<div id={{test}}></div>')).to.eql([
                 {
-                    type: 'BalancedTag',
+                    type: 'Component',
                     attributes: [
                         {
                             name: 'id',
@@ -395,7 +395,7 @@ describe('Template parser', function () {
         it('tag with attribute variable', function () {
             expect(parse('<div id="{{test}}"></div>')).to.eql([
                 {
-                    type: 'BalancedTag',
+                    type: 'Component',
                     attributes: [
                         {
                             name: 'id',
@@ -415,7 +415,7 @@ describe('Template parser', function () {
         it('tag with attribute variable', function () {
             expect(parse('<div id=test/>')).to.eql([
                 {
-                    type: 'SelfClosingTag',
+                    type: 'Component',
                     attributes: [
                         {
                             name: 'id',
@@ -432,16 +432,34 @@ describe('Template parser', function () {
         it('nesting', function () {
             expect(parse('<div><span>test</span></div>')).to.eql([
                 {
-                    type: 'BalancedTag',
+                    type: 'Component',
                     attributes: null,
                     content: [{
-                        type: 'BalancedTag',
+                        type: 'Component',
                         attributes: null,
                         content: [{
                             type: 'Text',
                             content: 'test'
                         }],
                         name: 'span'
+                    }],
+                    name: 'div'
+                }
+            ])
+        });
+        it('short components', function () {
+            expect(parse('<div><br><br></div>')).to.eql([
+                {
+                    type: 'Component',
+                    attributes: null,
+                    content: [{
+                        type: 'Component',
+                        attributes: null,
+                        name: 'br'
+                    },{
+                        type: 'Component',
+                        attributes: null,
+                        name: 'br'
                     }],
                     name: 'div'
                 }
@@ -489,7 +507,7 @@ describe('Template parser', function () {
                 }],
                 "content": [],
                 "name": "div",
-                "type": "BalancedTag"
+                "type": "Component"
             }])
         });
     });
@@ -510,7 +528,7 @@ describe('Template parser', function () {
                 }],
                 "content": [],
                 "name": "div",
-                "type": "BalancedTag"
+                "type": "Component"
             }])
         });
     });
