@@ -55,4 +55,16 @@ describe('TrimSpacesOptimizer', function () {
 
         expect(result).to.equal('module.exports = function(context){return context.helper.call(context,1,{"hash":{}})}');
     });
+
+    it('don\'t optimize escaped string', function () {
+        let result = compiler.compileString(' `1\n<br>` ').split('\n').pop();
+
+        expect(result).to.equal('module.exports = function(context){return "1\\n<br>"}');
+    });
+
+    it('don\'t optimize escaped string', function () {
+        let result = compiler.compileString(' `1\n<br>` ').split('\n').pop();
+
+        expect(result).to.equal('module.exports = function(context){return "1\\n<br>"}');
+    });
 });

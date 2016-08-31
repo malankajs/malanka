@@ -27,7 +27,7 @@ describe('TemplateNodeAttribute', function () {
         expect(node.isEvent()).to.equal(true);
         expect(node.name).to.equal('click');
         expect(node.compileEvent()).to.eql({
-            click: '(function(v0){return v0.emit.bind(v0)})(context.proxy("click"))'
+            click: '(function(v0){return v0.emitValue.bind(v0)})(context.proxy("click"))'
         });
     });
 

@@ -61,6 +61,32 @@ describe('TemplateNodeComponent', function () {
             expect(result).to.equal('module.exports = function(context){return new Component({"content":function(scope){return scope.test=new Component({})}})}');
         });
 
+        describe('events', function() {
+            it('compile events', function() {
+                let result = compiler.compileString('<div onclick=onClick()></div>').split('\n').pop();
+
+                expect(result).to.equal('module.exports = function(context){return new Component({"events":{"click":context.onClick.bind(context)}})}');
+            });
+
+            it('compile events as param', function() {
+                let result = compiler.compileString('<div events=events></div>').split('\n').pop();
+
+                expect(result).to.equal('module.exports = function(context){return new Component({"events":context.events})}');
+            });
+
+            it('compile events as param and as on event', function() {
+                let result = compiler.compileString('<div events=events onclick=onClick()></div>').split('\n').pop();
+
+                expect(result).to.equal('module.exports = function(context){return new Component({"events":Object.assign({},context.events,{"click":context.onClick.bind(context)})})}');
+            });
+
+            it('compile events as proxy', function() {
+                let result = compiler.compileString('<div onclick=@state.value></div>').split('\n').pop();
+
+                expect(result).to.equal('module.exports = function(context){return new Component({"events":{"click":(function(v0){return v0.emitValue.bind(v0)})(context.proxy("state").proxy("value"))}})}');
+            });
+        });
+
         describe('pragma', function() {
             describe('bundle', function() {
                 it('compile bundle components', function() {

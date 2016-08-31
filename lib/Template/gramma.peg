@@ -88,13 +88,13 @@ ComponentValuedAttributeData
 
 // Text
 Text
-    = '{' [^{]+ {
+    = '{' [^{`]+ {
         return {
             type: 'Text',
             content: text()
         };
     }
-    / [^<{]+ {
+    / [^<{`]+ {
         return {
             type: 'Text',
             content: text()
@@ -126,7 +126,12 @@ StringData
 EscapedString
     = '```' { return ['`'] }
     / '\\`' { return ['`'] }
-    / '`' text:(!'`' c:. {return c})* '`' { return [text.join('')] }
+    / '`' text:(!'`' c:. {return c})* '`' {
+    	return {
+        	type: 'EscapedString',
+            content: text.join('')
+        }
+    }
 
 
 // Expressions
