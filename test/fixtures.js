@@ -14,7 +14,7 @@ export function pathFixture(path) {
  * Create compiler for easy test
  *
  * @param {{}} [options]
- * @returns {{compile: compile, render: render}}
+ * @returns {{compile: compile, render: render, compileToString: compileToString}}
  */
 export function createCompiler(options) {
     let env = new Environment({
@@ -37,13 +37,21 @@ export function createCompiler(options) {
     }, options));
 
     /**
+     * @param {string} template
+     * @returns {string}
+     */
+    function compileToString(template) {
+        return compiler.compileString(template);
+    }
+
+    /**
      * Compile template
      *
      * @param string
      * @returns {string}
      */
     function compile(string) {
-        let moduleContent = compiler.compileString(string);
+        let moduleContent = compileToString(string);
 
         let module = {};
         eval(moduleContent);
@@ -72,5 +80,5 @@ export function createCompiler(options) {
         }
     }
 
-    return {compile, render};
+    return {compile, render, compileToString};
 }

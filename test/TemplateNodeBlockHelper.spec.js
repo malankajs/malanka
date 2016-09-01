@@ -58,7 +58,7 @@ describe('TemplateNodeBlockHelper', function () {
     it('compile short if inlined', function () {
         let result = compiler.compileString('{{test (param ? 1 : 2)}}').split('\n').pop();
 
-        expect(result).to.equal('module.exports = function(context){return context.test.call(context,context.if.call(context,context.param,{"hash":{},"content":function(){return 1},"inverse":function(){return 2}}),{"hash":{}})}');
+        expect(result).to.equal('module.exports = function(context){return context.test.call(context,context.if.call(context,context.param,{"hash":{},"isString":true,"content":function(){return 1},"inverse":function(){return 2}}),{"hash":{}})}');
     });
 
     it('compile short if without then and watch variable', function () {
@@ -67,4 +67,9 @@ describe('TemplateNodeBlockHelper', function () {
         expect(result).to.equal('module.exports = function(context){return context.if.call(context,context.proxy("test"),{"hash":{},"content":function(){return context.proxy("test")},"inverse":function(){return 2}})}');
     });
 
+    it('compile short if inlined with interpolation', function () {
+        let result = compiler.compileString('{{test (param ? "test:{{param}}")}}').split('\n').pop();
+
+        expect(result).to.equal('module.exports = function(context){return context.test.call(context,context.if.call(context,context.param,{"hash":{},"isString":true,"content":function(){return __join(__mergeStrings(["test:",context.param], context))}}),{"hash":{}})}');
+    });
 });
