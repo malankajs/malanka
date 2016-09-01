@@ -13,4 +13,17 @@ describe('Collection', function() {
         expect(collection.pluck('id')).to.eql([1, 2, 3]);
     });
 
+    it('supports length proxy', function () {
+        expect(collection.proxy('length').getValue()).to.equal(3);
+    });
+
+    it('supports length proxy emit', function () {
+        let len;
+
+        collection.proxy('length').on(length => len = length);
+        collection.add({id: 4});
+
+        expect(len).to.equal(4);
+    });
+
 });
