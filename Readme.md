@@ -235,7 +235,7 @@ write something like:
 <UserStats 
     model=user 
     #bundle=true 
-    #async=loadStats 
+    #async="loadStats" 
     #match="is_client"
 >
     ...
