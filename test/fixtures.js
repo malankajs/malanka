@@ -1,4 +1,4 @@
-import {TrimSpacesOptimizer} from '../lib/Template/optimizer/TrimSpacesOptimizer';
+import {TemplateTrimSpacesPlugin} from '../lib/Template/plugins/TemplateTrimSpacesPlugin';
 import {TemplateCompiler} from '../lib/Template/TemplateCompiler';
 import {StringRenderer} from '../lib/Renderer/StringRenderer';
 import {Environment} from '../lib/Environment';
@@ -31,7 +31,7 @@ export function createCompiler(options) {
         },
         optimize: {
             plugins: [
-                new TrimSpacesOptimizer()
+                new TemplateTrimSpacesPlugin()
             ]
         }
     }, options));

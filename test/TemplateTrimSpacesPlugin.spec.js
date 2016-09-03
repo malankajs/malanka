@@ -1,16 +1,14 @@
 import {expect} from 'chai';
 
 import {TemplateCompiler} from '../lib/Template/TemplateCompiler';
-import {TrimSpacesOptimizer} from '../lib/Template/optimizer/TrimSpacesOptimizer';
+import {TemplateTrimSpacesPlugin} from '../lib/Template/plugins/TemplateTrimSpacesPlugin';
 
-describe('TrimSpacesOptimizer', function () {
+describe('TemplateTrimSpacesPlugin', function () {
     let compiler;
 
     beforeEach(function () {
         compiler = new TemplateCompiler({
-            optimize: {
-                plugins: [new TrimSpacesOptimizer()]
-            }
+            plugins: [new TemplateTrimSpacesPlugin()]
         });
     });
 

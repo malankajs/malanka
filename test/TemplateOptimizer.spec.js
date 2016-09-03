@@ -4,12 +4,12 @@ import {TemplateNode} from '../lib/Template/nodes/TemplateNode';
 import {TemplateNodeVar} from '../lib/Template/nodes/TemplateNodeVar';
 import {TemplateNodePath} from '../lib/Template/nodes/TemplateNodePath';
 import {TemplateOptimizer} from '../lib/Template/TemplateOptimizer';
-import {TemplateOptimizerPlugin} from '../lib/Template/optimizer/TemplateOptimizerPlugin';
+import {TemplatePlugin} from '../lib/Template/plugins/TemplatePlugin';
 
-class DummyOptimizer extends TemplateOptimizerPlugin {
+class DummyOptimizer extends TemplatePlugin {
 }
 
-class NodeReplaceOptimizer extends TemplateOptimizerPlugin {
+class NodeReplaceOptimizer extends TemplatePlugin {
 
     constructor(node) {
         super();
@@ -23,7 +23,7 @@ class NodeReplaceOptimizer extends TemplateOptimizerPlugin {
 
 }
 
-class ModifyVariables extends TemplateOptimizerPlugin {
+class ModifyVariables extends TemplatePlugin {
 
     onNode(node) {
         node.onNode = true;
