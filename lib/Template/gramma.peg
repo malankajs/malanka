@@ -84,6 +84,8 @@ ComponentValuedAttributeData
     / BlockExpression
     / ExpressionPath
     / QuotedString
+    / Hash
+    / Array
 
 
 // Text
@@ -152,6 +154,8 @@ ExpressionAttribute
     / __ path:ExpressionPath (!'=') { return path }
     / __ helper:InlineExpression { return helper }
     / __ string:QuotedString { return string }
+    / __ hash:Hash { return hash }
+    / __ arr:Array { return arr }
 
 ExpressionAttributes = ExpressionAttribute+
 
@@ -161,6 +165,8 @@ ExpressionHashValue
     / ExpressionPath
     / InlineExpression
     / QuotedString
+    / Hash
+    / Array
 
 ExpressionHashAttribute
     = __ name:ExpressionName '=' value:ExpressionHashValue {
@@ -281,6 +287,45 @@ ExpressionComment
         };
     }
 
+// Structures
+
+Hash
+	= '{' attrs:HashAttributes? '}' {
+    	return {
+        	type: 'Hash',
+            attrs: attrs || []
+        }
+    }
+
+HashAttributes
+	= attr:HashAttribute ',' attrs:HashAttributes { return [attr].concat(attrs) }
+    / attr:HashAttribute { return attr }
+
+HashAttribute
+	= __? name:HashAttributeName __? ':' __? value:ExpressionHashValue __? {
+    	return {
+        	name: name,
+            value: value
+        }
+    }
+
+HashAttributeName
+	= [a-zA-Z0-9_]+ { return text() }
+
+Array
+	= '[' __? values:ArrayValues? __? ']' {
+    	return {
+        	type: 'Array',
+            values: values || []
+        }
+    }
+
+ArrayValues
+	= __? v:ArrayValue ',' vs:ArrayValues { return [v].concat(vs) }
+    / __? value:ArrayValue __? { return value }
+
+ArrayValue
+	= ExpressionHashValue
 
 // Primitives
 Primitive

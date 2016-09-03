@@ -45,6 +45,27 @@ Planner.lock(() => {
 // Here all events will be already triggered 
 ```
 
+## Attributes
+
+All components and helpers accept all supported types:
+
+```handlebars
+<input
+    data-int=1
+    data-float=1.2
+    data-bool=false
+    data-null=null
+    data-undefined=undefined
+    data-array=[1, 2, 3]
+    data-object={ a: 1, b: 2 }
+    data-var=testVar
+    data-watchVar=@testVar
+    data-string="string:{{andSomeVarInside}}"
+    data-helper={{multiple 1 2}}
+    data-method=ctx.method()
+>
+```
+
 ## Helpers
 
 ### each
