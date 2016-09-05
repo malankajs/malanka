@@ -136,5 +136,18 @@ describe('TemplateNodeComponent', function () {
                 });
             });
         });
+
+        describe('options', function() {
+            it('compile extra options', function() {
+                let result = compiler.compileString('<div options={a:1} test="1"></div>').split('\n').pop();
+
+                expect(result).to.equal('module.exports = function(context){return new Component(Object.assign({},{"a":1},{"attributes":{"test":"1"}}))}');
+            });
+            it('compile extra options', function() {
+                let result = compiler.compileString('<div options=test test="1"></div>').split('\n').pop();
+
+                expect(result).to.equal('module.exports = function(context){return new Component(Object.assign({},context.test,{"attributes":{"test":"1"}}))}');
+            });
+        });
     });
 });

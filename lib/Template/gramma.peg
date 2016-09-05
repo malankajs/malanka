@@ -299,7 +299,7 @@ Hash
 
 HashAttributes
 	= attr:HashAttribute ',' attrs:HashAttributes { return [attr].concat(attrs) }
-    / attr:HashAttribute { return attr }
+    / attr:HashAttribute { return [attr] }
 
 HashAttribute
 	= __? name:HashAttributeName __? ':' __? value:ExpressionHashValue __? {
