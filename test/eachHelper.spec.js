@@ -18,7 +18,7 @@ describe('eachHelper', function () {
     it('render array', function () {
         let data = [1, 2, 3];
 
-        let result = compiler.render('{{#each data scope="d"}}<i>{{d}}</i>{{/each}}', {data});
+        let result = compiler.render('{{#each data scope="d"}}\n<i>{{d}}</i>\n{{/each}}', {data});
 
         expect(result).to.equal('<i>1</i><i>2</i><i>3</i>');
     });
