@@ -11,7 +11,7 @@ describe('TemplateNodeContent', function () {
         env = new TemplateEnvironment({})
     });
 
-    it('optimize string literals', function () {
+    it('transform string literals', function () {
         let ast = [
             'test',
             'test2'

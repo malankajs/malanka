@@ -3,7 +3,7 @@ import {expect} from 'chai';
 import {TemplateNode} from '../lib/Template/nodes/TemplateNode';
 import {TemplateNodeVar} from '../lib/Template/nodes/TemplateNodeVar';
 import {TemplateNodePath} from '../lib/Template/nodes/TemplateNodePath';
-import {TemplateOptimizer} from '../lib/Template/TemplateOptimizer';
+import {TemplateTransformer} from '../lib/Template/TemplateTransformer';
 import {TemplatePlugin} from '../lib/Template/plugins/TemplatePlugin';
 
 class DummyOptimizer extends TemplatePlugin {
@@ -40,40 +40,40 @@ class ModifyVariables extends TemplatePlugin {
 }
 
 
-describe('TemplateOptimizer', function () {
+describe('TemplateTransformer', function () {
 
     it('there are no error, when plugins has no method', function () {
-        let optimizer = new TemplateOptimizer({
+        let transformer = new TemplateTransformer({
             plugins: [new DummyOptimizer()]
         });
 
         let node = new TemplateNode();
 
-        expect(optimizer.optimize(node)).to.equal(node);
+        expect(transformer.transform(node)).to.equal(node);
     });
 
     it('can replace node with another', function () {
         let newNode = new TemplateNode(),
             node = new TemplateNode();
 
-        let optimizer = new TemplateOptimizer({
+        let transformer = new TemplateTransformer({
             plugins: [new NodeReplaceOptimizer(newNode)]
         });
 
 
-        expect(optimizer.optimize(node)).to.equal(newNode);
+        expect(transformer.transform(node)).to.equal(newNode);
     });
 
     it('can modify specific type', function () {
         let node = new TemplateNode(),
             varNode = new TemplateNodeVar({});
 
-        let optimizer = new TemplateOptimizer({
+        let transformer = new TemplateTransformer({
             plugins: [new ModifyVariables()]
         });
 
-        optimizer.optimize(node);
-        optimizer.optimize(varNode);
+        transformer.transform(node);
+        transformer.transform(varNode);
 
         expect(node.onNode).to.equal(true);
         expect(node.onTemplateNodeVar).to.equal(undefined);
@@ -87,11 +87,11 @@ describe('TemplateOptimizer', function () {
             path: new TemplateNodePath('test')
         });
 
-        let optimizer = new TemplateOptimizer({
+        let transformer = new TemplateTransformer({
             plugins: [new ModifyVariables()]
         });
 
-        optimizer.optimize(node);
+        transformer.transform(node);
 
         expect(node.onNode).to.equal(true);
         expect(node.path.TemplateNodePath).to.equal(true);

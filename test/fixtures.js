@@ -29,11 +29,9 @@ export function createCompiler(options) {
         helpers: {
             json: require.resolve('./fixture/json.js')
         },
-        optimize: {
-            plugins: [
-                new TemplateTrimSpacesPlugin()
-            ]
-        }
+        plugins: [
+            new TemplateTrimSpacesPlugin()
+        ]
     }, options));
 
     /**
