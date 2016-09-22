@@ -1,16 +1,14 @@
 import {expect} from 'chai';
 
 import {TemplateCompiler} from '../lib/Template/TemplateCompiler';
-import {StylesOptimizer} from '../lib/Template/optimizer/StylesOptimizer';
+import {TemplateCSSModulesPlugin} from '../lib/Template/plugins/TemplateCSSModulesPlugin';
 
-describe('StylesOptimizer', function () {
+describe('TemplateCSSModulesPlugin', function () {
     let compiler;
 
     beforeEach(function () {
         compiler = new TemplateCompiler({
-            optimize: {
-                plugins: [new StylesOptimizer()]
-            }
+            plugins: [new TemplateCSSModulesPlugin()]
         });
     });
 

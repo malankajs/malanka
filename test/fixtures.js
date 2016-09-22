@@ -1,4 +1,4 @@
-import {TrimSpacesOptimizer} from '../lib/Template/optimizer/TrimSpacesOptimizer';
+import {TemplateTrimSpacesPlugin} from '../lib/Template/plugins/TemplateTrimSpacesPlugin';
 import {TemplateCompiler} from '../lib/Template/TemplateCompiler';
 import {StringRenderer} from '../lib/Renderer/StringRenderer';
 import {Environment} from '../lib/Environment';
@@ -29,11 +29,9 @@ export function createCompiler(options) {
         helpers: {
             json: require.resolve('./fixture/json.js')
         },
-        optimize: {
-            plugins: [
-                new TrimSpacesOptimizer()
-            ]
-        }
+        plugins: [
+            new TemplateTrimSpacesPlugin()
+        ]
     }, options));
 
     /**
