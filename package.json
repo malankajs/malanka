@@ -1,6 +1,6 @@
 {
   "name": "malanka",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Malanka framework",
   "main": "es5/index.js",
   "scripts": {
