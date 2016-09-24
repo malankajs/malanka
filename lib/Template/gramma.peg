@@ -1,4 +1,4 @@
-Content = (EscapedString / ComponentComment / Component / BlockExpression / ExpressionComment / Expression / Text)*
+Content = (EscapedString / ComponentComment / Component / AnyExpression / Text)*
 
 // Components
 
@@ -138,6 +138,12 @@ EscapedString
 
 
 // Expressions
+AnyExpression
+	= BlockExpression
+    / ExpressionComment
+    / ExpressionTemplate
+    / Expression
+
 ExpressionPath
     = name:ExpressionName {
         return {
@@ -286,6 +292,19 @@ ExpressionComment
             type: 'Comment',
             content: c.join('')
         };
+    }
+
+ExpressionTemplate
+	= '{{#>' __? start:ExpressionName '}}' content:Content '{{/' end:ExpressionName '}}'
+    & {
+    	return start === end;
+    }
+    {
+    	return {
+        	type: 'Template',
+            name: start,
+            content: content
+        }
     }
 
 // Structures
