@@ -69,7 +69,7 @@ ComponentValuelessAttribute
     = name:ComponentAttributeName {
         return {
             name: name,
-            value: null
+            value: {type: 'Primitive', value: true}
         };
     }
 
@@ -86,11 +86,12 @@ ComponentValuedAttributeData
     / QuotedString
     / Hash
     / Array
+    / Component
 
 
 // Text
 Text
-    = '{' [^{`]+ {
+    = '{' [^<{`]+ {
         return {
             type: 'Text',
             content: text()

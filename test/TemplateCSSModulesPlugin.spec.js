@@ -18,6 +18,12 @@ describe('TemplateCSSModulesPlugin', function () {
         expect(result).to.equal('module.exports = function(context){return new Component({"attributes":{"class":context.styles.test}})}');
     });
 
+    it('transform simple class with spaces', function () {
+        let result = compiler.compileString('<div class=" test "></div>').split('\n').pop();
+
+        expect(result).to.equal('module.exports = function(context){return new Component({"attributes":{"class":context.styles.test}})}');
+    });
+
     it('transform two classes', function () {
         let result = compiler.compileString('<div class="test1 test2"></div>').split('\n').pop();
 
@@ -45,7 +51,7 @@ describe('TemplateCSSModulesPlugin', function () {
     it('transform class with block helpers and watch var', function () {
         let result = compiler.compileString('<div class="test1 {{#if test}} {{@v1}}{{/if}}"></div>').split('\n').pop();
 
-        expect(result).to.equal('module.exports = function(context){return new Component({"attributes":{"class":(function(v0){return v0.pipe(function(v0){return __join(__mergeStrings([context.styles.test1," ",context.if.call(context,context.test,{"hash":{},"isString":true,"content":function(){return __join(__mergeStrings([" ",v0], context))}})], context))})})(context.proxy("v1"))}})}');
+        expect(result).to.equal('module.exports = function(context){return new Component({"attributes":{"class":context.proxy("v1").pipe(function(v0){return __join(__mergeStrings([context.styles.test1," ",context.if.call(context,context.test,{"hash":{},"isString":true,"content":function(){return __join(__mergeStrings([" ",v0], context))}})], context))})}})}');
     });
 
     it('transform class with helper and string params', function () {
