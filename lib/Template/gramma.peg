@@ -169,6 +169,7 @@ ExpressionAttributes = ExpressionAttribute+
 ExpressionHashValue
     = Primitive
     / EscapedString
+    / CallExpression
     / ExpressionPath
     / InlineExpression
     / QuotedString
