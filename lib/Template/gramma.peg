@@ -294,8 +294,11 @@ ExpressionComment
         };
     }
 
+ExpressionTemplateName
+	= [a-zA-Z_] [a-zA-Z0-9_]+ { return text() }
+
 ExpressionTemplate
-	= '{{#>' __? start:ExpressionName '}}' content:Content '{{/' end:ExpressionName '}}'
+	= '{{#>' __? start:ExpressionTemplateName __? '}}' content:Content '{{/' end:ExpressionTemplateName __? '}}'
     & {
     	return start === end;
     }

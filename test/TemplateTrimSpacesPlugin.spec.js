@@ -27,7 +27,13 @@ describe('TemplateTrimSpacesPlugin', function () {
     it('correct compile component with spaces inside', function () {
         let result = compiler.compileString('<div>   </div>').split('\n').pop();
 
-        expect(result).to.equal('module.exports = function(context){return new Component({"content":" "})}');
+        expect(result).to.equal('module.exports = function(context){return new Component({})}');
+    });
+
+    it('correct compile component with spaces inside and string', function () {
+        let result = compiler.compileString('<div> test  </div>').split('\n').pop();
+
+        expect(result).to.equal('module.exports = function(context){return new Component({"content":"test"})}');
     });
 
     it('correct compile component with spaces around in component', function () {
@@ -64,5 +70,17 @@ describe('TemplateTrimSpacesPlugin', function () {
         let result = compiler.compileString(' `1\n<br>` ').split('\n').pop();
 
         expect(result).to.equal('module.exports = function(context){return "1\\n<br>"}');
+    });
+
+    it('trim spaces between inline templates', function () {
+        let result = compiler.compileString(' {{#> test}}test{{/test}} <b>123</b>').split('\n').pop();
+
+        expect(result).to.equal('module.exports = function(context){var v0=function(test){return "test"};return new Component({"tagName":"b","content":"123"})}');
+    });
+
+    it('concat escaped strings', function() {
+        let result = compiler.compileString('` `test').split('\n').pop();
+
+        expect(result).to.equal('module.exports = function(context){return " test"}');
     });
 });
