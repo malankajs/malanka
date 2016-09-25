@@ -78,6 +78,12 @@ describe('TemplateTrimSpacesPlugin', function () {
         expect(result).to.equal('module.exports = function(context){var v0=function(test){return "test"};return new Component({"tagName":"b","content":"123"})}');
     });
 
+    it('trim spaces between inline templates and vars', function () {
+        let result = compiler.compileString(' {{#> test}}test{{/test}} {{test}}').split('\n').pop();
+
+        expect(result).to.equal('module.exports = function(context){var v0=function(test){return "test"};return v0}');
+    });
+
     it('concat escaped strings', function() {
         let result = compiler.compileString('` `test').split('\n').pop();
 
