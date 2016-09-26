@@ -207,7 +207,7 @@ describe('Template compiler', function () {
         var component = new Component({model});
         var result = render('<div>\n<span>   {{@model.value}}   </span>\n</div>', component);
 
-        expect(result).to.equal('<div><span> test </span></div>');
+        expect(result).to.equal('<div><span>test</span></div>');
     });
 
     it('Compile void elements', function () {

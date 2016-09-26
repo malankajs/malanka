@@ -155,6 +155,47 @@ it is equivalent to:
 <div class="{{#if myClass}}{{myClass}}{{else}}defaultClass{{/if}}"></div>
 ```
 
+## Inline templates
+
+In some cases can be useful declare inline template in template for several uses:
+
+```handlebars
+{{#> user}}
+    <div class="login">{{user.login}}</div>
+    <div class="name">{{user.name}}</div>
+{{/user}}
+
+<div class="current">
+    {{user currentUser}}
+</div>
+
+<div class="friends">
+    {{#each user.friends scope="friend"}}
+        {{user friend}}
+    {{/each}}
+</div>
+```
+
+Additionally you can pass template to helper or another component:
+
+```handlebars
+{{#> user}}
+    <div class="login">{{user.login}}</div>
+    <div class="name">{{user.name}}</div>
+{{/user}}
+
+<FriendsList friendTemplate=user />
+```
+
+Inline templates use context of parent template, so you can access to their properties
+as in normal template. For access to own context, use template name
+
+```handlebars
+{{#> user}}
+    <span>From parent template: {{updatedAt}}</span>
+    <span>From own context: {{user.updatedAt}}</span>
+{{/user}}
+```
 
 ## Template render pragma
 

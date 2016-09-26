@@ -1,4 +1,4 @@
-Content = (EscapedString / ComponentComment / Component / BlockExpression / ExpressionComment / Expression / Text)*
+Content = (EscapedString / ComponentComment / Component / AnyExpression / Text)*
 
 // Components
 
@@ -138,6 +138,12 @@ EscapedString
 
 
 // Expressions
+AnyExpression
+	= BlockExpression
+    / ExpressionComment
+    / ExpressionTemplate
+    / Expression
+
 ExpressionPath
     = name:ExpressionName {
         return {
@@ -163,6 +169,7 @@ ExpressionAttributes = ExpressionAttribute+
 ExpressionHashValue
     = Primitive
     / EscapedString
+    / CallExpression
     / ExpressionPath
     / InlineExpression
     / QuotedString
@@ -286,6 +293,22 @@ ExpressionComment
             type: 'Comment',
             content: c.join('')
         };
+    }
+
+ExpressionTemplateName
+	= [a-zA-Z_] [a-zA-Z0-9_]+ { return text() }
+
+ExpressionTemplate
+	= '{{#>' __? start:ExpressionTemplateName __? '}}' content:Content '{{/' end:ExpressionTemplateName __? '}}'
+    & {
+    	return start === end;
+    }
+    {
+    	return {
+        	type: 'Template',
+            name: start,
+            content: content
+        }
     }
 
 // Structures
