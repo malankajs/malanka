@@ -259,8 +259,8 @@ pragma, which creates components only if matches `define` params on `ComponentSc
 
 ```js
 // webpack.config.js
-
-modules.exports = {
+  		  
+module.exports = {
     // ...
     plugins: [
         new ComponentsScanner({
