@@ -12,6 +12,13 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/chai": "^3.4.33",
+    "@types/chai-as-promised": "0.0.29",
+    "@types/glob": "^5.0.30",
+    "@types/minimatch": "^2.0.29",
+    "@types/mocha": "^2.2.32",
+    "@types/node": "^6.0.41",
+    "@types/whatwg-fetch": "0.0.31",
     "babel-cli": "^6.10.1",
     "babel-core": "^6.9.1",
     "babel-plugin-check-es2015-constants": "^6.8.0",
@@ -47,13 +54,6 @@
     "typescript": "^2.0.3"
   },
   "dependencies": {
-    "@types/chai": "^3.4.33",
-    "@types/chai-as-promised": "0.0.29",
-    "@types/glob": "^5.0.30",
-    "@types/minimatch": "^2.0.29",
-    "@types/mocha": "^2.2.32",
-    "@types/node": "^6.0.41",
-    "@types/whatwg-fetch": "0.0.31",
     "glob": "^7.0.5",
     "whatwg-fetch": "^1.0.0"
   }
