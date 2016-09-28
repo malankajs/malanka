@@ -1,5 +1,6 @@
 /.idea/
 /dist/
 es5/
+es6/
 node_modules/
 /data/

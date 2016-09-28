@@ -1,6 +1,8 @@
 language: node_js
 before_script:
   - npm install
+env:
+  - TS_NODE_PROJECT=tsconfig.es5.json
 node_js:
   - "4"
   - "5"

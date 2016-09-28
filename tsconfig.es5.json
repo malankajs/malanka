@@ -1,0 +1,20 @@
+{
+  "extends": "./tsconfig",
+  "compilerOptions": {
+    "target": "es6",
+    "lib": [
+      "es5",
+      "dom",
+      "es2015.promise",
+      "es2015.core",
+      "es2015.iterable",
+      "es2015.collection"
+    ],
+    "noImplicitAny": false,
+    "sourceMap": true,
+    "allowJs": true,
+    "experimentalDecorators": true,
+    "outDir": "es5",
+    "allowSyntheticDefaultImports": true
+  }
+}
