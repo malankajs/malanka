@@ -1,0 +1,10 @@
+"use strict";
+
+exports.__esModule = true;
+exports.Prototype = Prototype;
+function Prototype(obj) {
+    return function (Class) {
+        Object.assign(Class.prototype, obj);
+    };
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL2xpYi9EZWNvcmF0b3JzL1Byb3RvdHlwZS5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7UUFBZ0IsUyxHQUFBLFM7QUFBVCxTQUFTLFNBQVQsQ0FBbUIsR0FBbkIsRUFBd0I7QUFDM0IsV0FBTyxVQUFVLEtBQVYsRUFBaUI7QUFDcEIsZUFBTyxNQUFQLENBQWMsTUFBTSxTQUFwQixFQUErQixHQUEvQjtBQUNILEtBRkQ7QUFHSCIsImZpbGUiOiJQcm90b3R5cGUuanMiLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgZnVuY3Rpb24gUHJvdG90eXBlKG9iaikge1xuICAgIHJldHVybiBmdW5jdGlvbiAoQ2xhc3MpIHtcbiAgICAgICAgT2JqZWN0LmFzc2lnbihDbGFzcy5wcm90b3R5cGUsIG9iaik7XG4gICAgfVxufSJdfQ==
